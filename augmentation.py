@@ -15,6 +15,7 @@ def random_replace(_input_text, n):
         print(input_text)
         print(len_input)
         if len_input <= 1:
+            raise Exception("asd")
             return input_text
 
         rand_idx = random.randint(0,len_input-1)
