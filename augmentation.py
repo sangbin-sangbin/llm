@@ -3,7 +3,13 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 import random
 import json
-
+import os
+from transformers import (
+    AutoModelForCausalLM,
+    logging,
+)
+from peft import PeftModel
+import re
 
 tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 unmasker = pipeline('fill-mask', model='bert-base-cased')
@@ -56,3 +62,4 @@ else:
 with open('../data/augmented_data.json', 'w') as f : 
     json.dump(augmented_data, f, indent=4)
     
+
