@@ -7,6 +7,7 @@ from transformers import (
     logging,
 )
 from peft import PeftModel
+import json
 
 
 # The model that you want to train from the Hugging Face hub

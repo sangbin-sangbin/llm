@@ -12,6 +12,8 @@ from transformers import (
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
 import random
+import json
+
 
 # The model that you want to train from the Hugging Face hub
 model_name = "llama-2-7b-chat-hf"
