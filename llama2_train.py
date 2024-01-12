@@ -105,7 +105,7 @@ save_steps = 25
 # Log every X updates steps
 logging_steps = 5
 
-eval_steps = 100
+eval_steps = 1000
 
 ################################################################################
 # SFT parameters
