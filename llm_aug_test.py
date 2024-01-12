@@ -13,6 +13,9 @@ import re
 
 model_name = "models/llama-2-7b-chat-hf"
 
+# Load the entire model on the GPU 0
+device_map = {"": 0}
+
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     low_cpu_mem_usage=True,

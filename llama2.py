@@ -17,6 +17,9 @@ model_name = "models/llama-2-7b-chat-hf"
 # Fine-tuned model name
 new_model = "models/new-model"
 
+# Load the entire model on the GPU 0
+device_map = {"": 0}
+
 # Reload model in FP16 and merge it with LoRA weights
 base_model = AutoModelForCausalLM.from_pretrained(
     model_name,
