@@ -59,7 +59,7 @@ use_nested_quant = False
 output_dir = "./results"
 
 # Number of training epochs
-num_train_epochs = 10
+num_train_epochs = 1000
 
 # Enable fp16/bf16 training (set bf16 to True with an A100)
 fp16 = False
@@ -105,7 +105,7 @@ save_steps = 25
 # Log every X updates steps
 logging_steps = 5
 
-eval_steps = 1000
+eval_steps = 100
 
 ################################################################################
 # SFT parameters
