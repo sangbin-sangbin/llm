@@ -53,8 +53,6 @@ else:
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 1)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
-        augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 4)} [/INST] {answer} </s>"} )
-        augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 5)} [/INST] {answer} </s>"} )
     with open('../data/augmented_data.json', 'w') as f : 
         json.dump(augmented_data, f, indent=4)
 
