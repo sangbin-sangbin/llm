@@ -118,7 +118,7 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-dataset = json.load(open('../data/not_augmented_data.json'))
+dataset = json.load(open('../data/augmented_data.json'))
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
