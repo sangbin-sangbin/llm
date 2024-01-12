@@ -4,6 +4,7 @@ import torch
 import random
 import json
 
+
 tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 unmasker = pipeline('fill-mask', model='bert-base-cased')
 
@@ -30,7 +31,7 @@ def random_replace(_input_text, n):
         res = helper(res)
     return res
 
-data = json.load(open('data.json'))
+data = json.load(open('data/data.json'))
 augmented_data = []
 
 res = input('data augmentation? [y / n]')
@@ -38,6 +39,8 @@ res = input('data augmentation? [y / n]')
 if res == 'n':
     for q, a in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
+    with open('data/not_augmented_data.json', 'w') as f : 
+        json.dump(augmented_data, f, indent=4)
 else:
     for q, a in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
@@ -46,8 +49,8 @@ else:
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 4)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 5)} [/INST] {answer} </s>"} )
+    with open('data/augmented_data.json', 'w') as f : 
+        json.dump(augmented_data, f, indent=4)
 
-with open('augmented_data.json', 'w') as f : 
-	json.dump(augmented_data, f, indent=4)
 
     

@@ -11,10 +11,10 @@ import json
 
 
 # The model that you want to train from the Hugging Face hub
-model_name = "llama-2-7b-chat-hf"
+model_name = "models/llama-2-7b-chat-hf"
 
 # Fine-tuned model name
-new_model = "new-model"
+new_model = "models/new-model"
 
 # Reload model in FP16 and merge it with LoRA weights
 base_model = AutoModelForCausalLM.from_pretrained(

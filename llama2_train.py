@@ -16,10 +16,10 @@ import json
 
 
 # The model that you want to train from the Hugging Face hub
-model_name = "llama-2-7b-chat-hf"
+model_name = "models/llama-2-7b-chat-hf"
 
 # Fine-tuned model name
-new_model = "new-model"
+new_model = "models/new-model"
 
 ################################################################################
 # QLoRA parameters
@@ -118,7 +118,7 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-dataset = json.load(open('augmented_data.json'))
+dataset = json.load(open('data/not_augmented_data.json'))
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
