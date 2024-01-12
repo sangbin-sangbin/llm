@@ -12,10 +12,10 @@ import re
 
 
 # The model that you want to train from the Hugging Face hub
-model_name = "models/llama-2-7b-chat-hf"
+model_name = "../models/llama-2-7b-chat-hf"
 
 # Fine-tuned model name
-new_model = "models/new-model"
+new_model = "../models/new-model"
 
 # Load the entire model on the GPU 0
 device_map = {"": 0}
