@@ -36,7 +36,7 @@ while True:
     for result in results:
         result = result['generated_text'].replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
         re.sub(r' +', ' ', result)
-        re.sub(r'\s{2,}', '\n' result)
+        re.sub(r'\s{2,}', '\n', result)
 
         print()
         print(result)
