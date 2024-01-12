@@ -12,14 +12,17 @@ def random_replace(_input_text, n):
     def helper(input_text):
         input_text_list = input_text.split()
         len_input = len(input_text_list)
-        
-        rand_idx = random.randint(1,len_input-1)
+        if len_input <= 1:
+            return input_text
+
+        rand_idx = random.randint(0,len_input-1)
         orig_word = input_text_list[rand_idx]
         new_text_list = input_text_list.copy()
         new_text_list[rand_idx] = tokenizer.mask_token
         new_mask_sent = ' '.join(new_text_list)
 
         augmented_text_list = unmasker(new_mask_sent)
+        augmented_text = input_text
         for res in augmented_text_list:
             if res['token_str'] != orig_word:
                 augmented_text = res['sequence']
