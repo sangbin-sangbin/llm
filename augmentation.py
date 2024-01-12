@@ -12,10 +12,7 @@ def random_replace(_input_text, n):
     def helper(input_text):
         input_text_list = input_text.split()
         len_input = len(input_text_list)
-        print(input_text)
-        print(len_input)
         if len_input <= 1:
-            raise Exception("asd")
             return input_text
 
         rand_idx = random.randint(0,len_input-1)
@@ -27,7 +24,7 @@ def random_replace(_input_text, n):
         augmented_text_list = unmasker(new_mask_sent)
         augmented_text = input_text
         for res in augmented_text_list:
-            if res['token_str'] != orig_word:
+            if res['token_str'] != orig_word and len(res['token_str']) > 0:
                 augmented_text = res['sequence']
                 break
         return augmented_text
