@@ -105,6 +105,8 @@ save_steps = 25
 # Log every X updates steps
 logging_steps = 5
 
+eval_steps = 100
+
 ################################################################################
 # SFT parameters
 ################################################################################
@@ -189,7 +191,8 @@ training_arguments = TrainingArguments(
     warmup_ratio=warmup_ratio,
     group_by_length=group_by_length,
     lr_scheduler_type=lr_scheduler_type,
-    evaluation_strategy="epoch",
+    evaluation_strategy="steps",
+    eval_steps=eval_steps,
     do_eval=True,
     report_to="tensorboard"
 )
