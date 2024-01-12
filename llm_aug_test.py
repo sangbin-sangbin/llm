@@ -38,7 +38,12 @@ while True:
     result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {prompt} [/INST]")[0]
     result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]", '').replace('</s>', '')
     re.sub(r'\s', '', result)
+    rephrased_sentences = result.split('\n')
 
-    print()
-    print(result)
-    print()
+    sentence_num = 1
+    for rephrased_sentence in rephrased_sentences:
+        if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
+            print()
+            print(rephrased_sentence[len(str(sentence_num))+2:])
+            print()
+            sentence_num += 1
