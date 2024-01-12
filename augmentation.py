@@ -37,12 +37,12 @@ augmented_data = []
 res = input('data augmentation? [y / n]')
 
 if res == 'n':
-    for q, a in data:
+    for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
     with open('../data/not_augmented_data.json', 'w') as f : 
         json.dump(augmented_data, f, indent=4)
 else:
-    for q, a in data:
+    for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 1)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
