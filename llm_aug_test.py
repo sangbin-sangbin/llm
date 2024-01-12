@@ -34,10 +34,10 @@ logging.set_verbosity(logging.CRITICAL)
 
 while True:
     prompt = input('prompt: ')
-    pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer)
+    pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
     results = pipe(f"<s>[INST] Please rephrase the following sentence: {prompt} [/INST]")
     for result in results:
-        result = result['generated_text'].replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
+        result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence: {prompt} [/INST]", '').replace('</s>', '')
         re.sub(r' +', ' ', result)
         re.sub(r'\s{2,}', '\n', result)
 
