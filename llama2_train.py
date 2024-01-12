@@ -13,6 +13,7 @@ from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
 import random
 import json
+from datasets import Dataset
 
 
 # The model that you want to train from the Hugging Face hub
