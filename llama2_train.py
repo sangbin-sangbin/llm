@@ -190,7 +190,7 @@ training_arguments = TrainingArguments(
     group_by_length=group_by_length,
     lr_scheduler_type=lr_scheduler_type,
     evaluation_strategy="epoch",
-    do_eval=True
+    do_eval=True,
     report_to="tensorboard"
 )
 
