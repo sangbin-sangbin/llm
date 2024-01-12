@@ -7,7 +7,6 @@ from transformers import (
     logging,
 )
 from peft import PeftModel
-import random_replace
 
 
 # The model that you want to train from the Hugging Face hub
@@ -39,5 +38,5 @@ logging.set_verbosity(logging.CRITICAL)
 while True:
     prompt = input('question: ')
     pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=200)
-    result = pipe(f"<s>[INST] {prompt} [/INST]").replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
-    print(result[0]['generated_text'])
+    result = pipe(f"<s>[INST] {prompt} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
+    print(result)
