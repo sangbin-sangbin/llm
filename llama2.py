@@ -39,7 +39,7 @@ logging.set_verbosity(logging.CRITICAL)
 
 while True:
     prompt = input('question: ')
-    pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=200)
+    pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer)
     result = pipe(f"<s>[INST] {prompt} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
     re.sub(r' +', ' ', result)
     re.sub(r'\s{2,}', '\n' result)
