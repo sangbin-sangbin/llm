@@ -37,7 +37,6 @@ while True:
     pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
     result = pipe(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]")[0]
     result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]", '').replace('</s>', '')
-    result = re.compile('[\(\{][^)]+[\)\}]').findall(result)[0]
     re.sub(r'\s', '', result)
 
     print()
