@@ -12,6 +12,8 @@ def random_replace(_input_text, n):
     def helper(input_text):
         input_text_list = input_text.split()
         len_input = len(input_text_list)
+        print(input_text)
+        print(len_input)
         if len_input <= 1:
             return input_text
 
@@ -37,7 +39,7 @@ def random_replace(_input_text, n):
 data = json.load(open('../data/data.json'))
 augmented_data = []
 
-res = input('data augmentation? [y / n]')
+res = input('data augmentation? [y / n]\n>>> ')
 
 if res == 'n':
     for question, answer in data:
