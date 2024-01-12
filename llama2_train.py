@@ -118,7 +118,17 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-dataset = json.load(open('../data/augmented_data.json'))
+data_list = json.load(open('../data/augmented_data.json'))
+data_len = len(data_list)
+
+train_data_list = data_list[:int(data_len*0.9)]
+val_data_list = data_list[int(data_len*0.9):]
+
+train_data_dict = {"text": [item["text"] for item in train_data_list]}
+val_data_dict = {"text": [item["text"] for item in val_data_list]}
+
+train_dataset = Dataset.from_dict(train_data_dict)
+val_dataset = Dataset.from_dict(val_data_dict)
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
@@ -184,7 +194,8 @@ training_arguments = TrainingArguments(
 # Set supervised fine-tuning parameters
 trainer = SFTTrainer(
     model=model,
-    train_dataset=dataset,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
     peft_config=peft_config,
     dataset_text_field="text",
     max_seq_length=max_seq_length,
