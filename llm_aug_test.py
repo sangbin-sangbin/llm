@@ -11,7 +11,7 @@ import json
 import re
 
 
-model_name = "models/llama-2-7b-chat-hf"
+model_name = "../models/llama-2-7b-chat-hf"
 
 # Load the entire model on the GPU 0
 device_map = {"": 0}
