@@ -34,9 +34,10 @@ logging.set_verbosity(logging.CRITICAL)
 
 data = json.load(open('../data/data.json'))
 test_data = []
-text_num = 10
+text_num = 3
 
 for question, answer in data:
+    print(question)
     pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
     result = pipe(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]")[0]
     result = result['generated_text'].replace(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
