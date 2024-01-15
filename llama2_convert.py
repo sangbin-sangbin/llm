@@ -3,8 +3,11 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from transformers import AutoModelForSequenceClassification
-from transformers import AutoTokenizer
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoModelForCausalLM,
+    AutoTokenizer
+)
 
 
 # The model that you want to train from the Hugging Face hub
