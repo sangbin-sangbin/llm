@@ -224,7 +224,7 @@ test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(op
 def tokenize(element):
     outputs = tokenizer(
         element['text'],
-        add_special_tokens=add_special_tokens,
+        add_special_tokens=True,
         truncation=True,
         padding=False,
         max_length=1024,
