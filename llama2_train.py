@@ -14,7 +14,7 @@ from trl import SFTTrainer
 import random
 import json
 from datasets import Dataset
-from Math import inf
+from math import inf
 
 # The model that you want to train from the Hugging Face hub
 model_name = "../models/llama-2-7b-chat-hf"
