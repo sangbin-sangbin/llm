@@ -36,7 +36,7 @@ text = "Which Remote Services can I use for my vehicle in conjunction with the M
 
 encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
 
-save_model_path = Path('./vino_model.xml')
+save_model_path = Path('../models/vino_model.xml')
 
 if not save_model_path.exists():
     ov_model = ov.convert_model(model, example_input=dict(encoded_input))
