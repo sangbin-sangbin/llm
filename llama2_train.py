@@ -221,10 +221,28 @@ trainer.model.save_pretrained(new_model)
 
 test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
 
-test_dataset = trainer._prepare_dataset(
-    test_dataset,
-    tokenizer
+def tokenize(element):
+    outputs = tokenizer(
+        element[dataset_text_field] if not use_formatting_func else formatting_func(element),
+        add_special_tokens=add_special_tokens,
+        truncation=True,
+        padding=False,
+        max_length=max_seq_length,
+        return_overflowing_tokens=False,
+        return_length=False,
+    )
+
+    return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
+
+tokenized_dataset = dataset.map(
+    tokenize,
+    batched=True,
+    remove_columns=dataset.column_names if remove_unused_columns else None,
+    num_proc=self.dataset_num_proc,
+    batch_size=self.dataset_batch_size,
 )
+
+return tokenized_dataset
 
 res = trainer.evaluate(eval_dataset=test_dataset)
 
