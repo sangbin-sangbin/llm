@@ -102,9 +102,9 @@ group_by_length = True
 save_steps = 100000
 
 # Log every X updates steps
-logging_steps = 100
+logging_steps = 500
 
-eval_steps = 100
+eval_steps = 1000
 
 ################################################################################
 # SFT parameters
