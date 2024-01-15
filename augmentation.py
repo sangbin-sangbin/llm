@@ -77,6 +77,7 @@ else:
     logging.set_verbosity(logging.CRITICAL)
 
     for question, answer in data:
+        print(question)
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
 
         pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
@@ -90,6 +91,8 @@ else:
             if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
                 augmented_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
                 sentence_num += 1
+        if sentence_num != 10:
+            print("error at", question)
 
 with open('../data/augmented_data.json', 'w') as f : 
     json.dump(augmented_data, f, indent=4)
