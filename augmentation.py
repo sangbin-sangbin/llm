@@ -79,11 +79,10 @@ else:
     for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
 
-        prompt = input('prompt: ')
         pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
-        result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {prompt} [/INST]")[0]
-        result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]", '').replace('</s>', '')
-        re.sub(r'\s', '', result)
+        result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {question} [/INST]")[0]
+        result = result['generated_text'].replace(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
+        re.sub(r'  ', ' ', result)
         rephrased_sentences = result.split('\n')
 
         sentence_num = 1
