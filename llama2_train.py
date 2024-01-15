@@ -92,6 +92,8 @@ optim = "paged_adamw_32bit"
 # Learning rate schedule (constant a bit better than cosine)
 lr_scheduler_type = "constant"
 
+max_steps = 100
+
 # Ratio of steps for a linear warmup (from 0 to learning rate)
 warmup_ratio = 0.03
 
@@ -103,7 +105,7 @@ group_by_length = True
 save_steps = 100000
 
 # Log every X updates steps
-logging_steps = 5
+logging_steps = 100
 
 eval_steps = 100
 
@@ -188,6 +190,7 @@ training_arguments = TrainingArguments(
     fp16=fp16,
     bf16=bf16,
     max_grad_norm=max_grad_norm,
+    max_steps=max_steps,
     warmup_ratio=warmup_ratio,
     group_by_length=group_by_length,
     lr_scheduler_type=lr_scheduler_type,
@@ -215,3 +218,7 @@ trainer.train()
 
 # Save trained model
 trainer.model.save_pretrained(new_model)
+
+test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
+res = trainer.evaluate(test_dataset)
+print(res.keys())

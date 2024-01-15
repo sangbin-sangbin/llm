@@ -32,18 +32,25 @@ tokenizer.padding_side = "right"
 
 logging.set_verbosity(logging.CRITICAL)
 
-while True:
-    prompt = input('prompt: ')
+data = json.load(open('../data/data.json'))
+test_data = []
+text_num = 10
+
+for question, answer in data:
     pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
-    result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {prompt} [/INST]")[0]
-    result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]", '').replace('</s>', '')
-    re.sub(r'\s', '', result)
+    result = pipe(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]")[0]
+    result = result['generated_text'].replace(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
+    re.sub(r'  ', '', result)
     rephrased_sentences = result.split('\n')
 
     sentence_num = 1
     for rephrased_sentence in rephrased_sentences:
         if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
-            print()
-            print(rephrased_sentence[len(str(sentence_num))+2:])
-            print()
+            test_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
             sentence_num += 1
+
+    if sentence_num - 1 != text_num:
+        print("\nERROR!!!", sentence_num - 1, "text generated.\n")
+
+with open('../data/test_data.json', 'w') as f : 
+    json.dump(test_data, f, indent=4)

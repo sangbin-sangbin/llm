@@ -76,13 +76,15 @@ else:
     
     logging.set_verbosity(logging.CRITICAL)
 
+    text_num = 10
+
     for question, answer in data:
         print(question)
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
 
         pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
-        result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {question} [/INST]")[0]
-        result = result['generated_text'].replace(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
+        result = pipe(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]")[0]
+        result = result['generated_text'].replace(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
         re.sub(r'  ', ' ', result)
         rephrased_sentences = result.split('\n')
 
@@ -91,8 +93,8 @@ else:
             if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
                 augmented_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
                 sentence_num += 1
-        if sentence_num != 11:
-            print("\nERROR!!!", sentence_num-1, "text generated.\n")
+        if sentence_num - 1 != text_num:
+            print("\nERROR!!!", sentence_num - 1, "text generated.\n")
 
 with open('../data/augmented_data.json', 'w') as f : 
     json.dump(augmented_data, f, indent=4)
