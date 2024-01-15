@@ -220,5 +220,13 @@ trainer.train()
 trainer.model.save_pretrained(new_model)
 
 test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
-res = trainer.evaluate()
+
+formatting_func = get_formatting_func_from_dataset(train_dataset, tokenizer)
+test_dataset = trainer._prepare_dataset(
+    test_dataset,
+    tokenizer
+)
+
+res = trainer.evaluate(eval_dataset=test_dataset)
+
 print(res.keys())
