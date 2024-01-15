@@ -237,9 +237,7 @@ def tokenize(element):
 tokenized_dataset = test_dataset.map(
     tokenize,
     batched=True,
-    remove_columns=dataset.column_names if remove_unused_columns else None,
-    num_proc=self.dataset_num_proc,
-    batch_size=self.dataset_batch_size,
+    remove_columns=dataset.column_names
 )
 
 
