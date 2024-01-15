@@ -41,13 +41,13 @@ for question, answer in data:
     pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
     result = pipe(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]")[0]
     result = result['generated_text'].replace(f"<s>[INST] Please give me a list of {text_num} rephrased sentence of following sentence: {question} [/INST]", '').replace('</s>', '')
-    re.sub(r'  ', '', result)
+    re.sub(r'  ', ' ', result)
     rephrased_sentences = result.split('\n')
 
     sentence_num = 1
     for rephrased_sentence in rephrased_sentences:
         if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
-            test_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
+            test_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
             sentence_num += 1
 
     if sentence_num - 1 != text_num:

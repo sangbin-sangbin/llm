@@ -92,7 +92,7 @@ optim = "paged_adamw_32bit"
 # Learning rate schedule (constant a bit better than cosine)
 lr_scheduler_type = "constant"
 
-max_steps = 1
+max_steps = None
 
 # Ratio of steps for a linear warmup (from 0 to learning rate)
 warmup_ratio = 0.03
@@ -242,4 +242,4 @@ tokenized_dataset = test_dataset.map(
 
 res = trainer.evaluate(eval_dataset=tokenized_dataset)
 
-print(res['eval_loss'])
+print('eval_loss:', res['eval_loss'])
