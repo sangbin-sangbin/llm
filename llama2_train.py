@@ -220,5 +220,6 @@ trainer.train()
 trainer.model.save_pretrained(new_model)
 
 test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
+print(type(test_dataset))
 res = trainer.evaluate(test_dataset)
 print(res.keys())
