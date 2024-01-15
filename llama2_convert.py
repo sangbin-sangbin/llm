@@ -7,6 +7,7 @@ from transformers import (
     AutoTokenizer
 )
 from peft import PeftModel
+import openvino as ov
 
 # The model that you want to train from the Hugging Face hub
 model_name = "../models/llama-2-7b-chat-hf"
