@@ -14,7 +14,7 @@ from trl import SFTTrainer
 import random
 import json
 from datasets import Dataset
-
+from Math import inf
 
 # The model that you want to train from the Hugging Face hub
 model_name = "../models/llama-2-7b-chat-hf"
@@ -92,7 +92,7 @@ optim = "paged_adamw_32bit"
 # Learning rate schedule (constant a bit better than cosine)
 lr_scheduler_type = "constant"
 
-max_steps = None
+max_steps = inf
 
 # Ratio of steps for a linear warmup (from 0 to learning rate)
 warmup_ratio = 0.03
