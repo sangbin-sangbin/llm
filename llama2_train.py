@@ -11,7 +11,6 @@ from transformers import (
 )
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
-from trl.dataset_formatting import get_formatting_func_from_dataset
 import random
 import json
 from datasets import Dataset
@@ -222,7 +221,6 @@ trainer.model.save_pretrained(new_model)
 
 test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
 
-formatting_func = get_formatting_func_from_dataset(train_dataset, tokenizer)
 test_dataset = trainer._prepare_dataset(
     test_dataset,
     tokenizer
