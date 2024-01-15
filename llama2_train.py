@@ -223,11 +223,11 @@ test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(op
 
 def tokenize(element):
     outputs = tokenizer(
-        element[dataset_text_field] if not use_formatting_func else formatting_func(element),
+        element['text'],
         add_special_tokens=add_special_tokens,
         truncation=True,
         padding=False,
-        max_length=max_seq_length,
+        max_length=1024,
         return_overflowing_tokens=False,
         return_length=False,
     )
