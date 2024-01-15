@@ -43,6 +43,7 @@ encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
 save_model_path = Path('../models/vino_model.xml')
 
 if not save_model_path.exists():
+    encoded_input.to('cuda')
     ov_model = ov.convert_model(fine_tuned_model, example_input=dict(encoded_input))
     ov.save_model(ov_model, save_model_path)
 else:
