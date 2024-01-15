@@ -11,7 +11,7 @@ from transformers import (
 )
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
-from trl.extras.dataset_formatting import get_formatting_func_from_dataset
+from trl.dataset_formatting import get_formatting_func_from_dataset
 import random
 import json
 from datasets import Dataset
