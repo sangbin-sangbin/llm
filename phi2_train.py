@@ -15,11 +15,12 @@ import random
 import json
 from datasets import Dataset
 
+
 # The model that you want to train from the Hugging Face hub
-model_name = "../models/llama-2-7b-chat-hf"
+model_name = "microsoft/phi-2"
 
 # Fine-tuned model name
-new_model = "../models/new-llama2-model"
+new_model = "../models/new-phi2-model"
 
 ################################################################################
 # QLoRA parameters
