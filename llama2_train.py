@@ -234,7 +234,7 @@ def tokenize(element):
 
     return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
 
-tokenized_dataset = dataset.map(
+tokenized_dataset = test_dataset.map(
     tokenize,
     batched=True,
     remove_columns=dataset.column_names if remove_unused_columns else None,
