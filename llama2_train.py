@@ -240,7 +240,6 @@ tokenized_dataset = test_dataset.map(
     remove_columns=test_dataset.column_names
 )
 
-
 res = trainer.evaluate(eval_dataset=tokenized_dataset)
 
-print(res.keys())
+print(res['eval_loss'])
