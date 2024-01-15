@@ -241,6 +241,6 @@ tokenized_dataset = test_dataset.map(
 )
 
 
-res = trainer.evaluate(eval_dataset=test_dataset)
+res = trainer.evaluate(eval_dataset=tokenized_dataset)
 
 print(res.keys())
