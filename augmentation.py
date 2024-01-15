@@ -55,9 +55,42 @@ elif res == 'bert':
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
 else:
+    model_name = "../models/llama-2-7b-chat-hf"
+
+    # Load the entire model on the GPU 0
+    device_map = {"": 0}
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        low_cpu_mem_usage=True,
+        return_dict=True,
+        torch_dtype=torch.float16,
+        device_map=device_map,
+    )
+
+    # Reload tokenizer to save it
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "right"
+    
+    logging.set_verbosity(logging.CRITICAL)
+
     for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
-        augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
+
+        prompt = input('prompt: ')
+        pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
+        result = pipe(f"<s>[INST] Please give me a list of 10 rephrased sentence of following sentence: {prompt} [/INST]")[0]
+        result = result['generated_text'].replace(f"<s>[INST] Please rephrase the following sentence in json format: {prompt} [/INST]", '').replace('</s>', '')
+        re.sub(r'\s', '', result)
+        rephrased_sentences = result.split('\n')
+
+        sentence_num = 1
+        for rephrased_sentence in rephrased_sentences:
+            if str(sentence_num) == rephrased_sentence[:len(str(sentence_num))]:
+                augmented_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
+                sentence_num += 1
 
 with open('../data/augmented_data.json', 'w') as f : 
     json.dump(augmented_data, f, indent=4)

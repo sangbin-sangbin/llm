@@ -59,7 +59,7 @@ use_nested_quant = False
 output_dir = "./results"
 
 # Number of training epochs
-num_train_epochs = 1000
+num_train_epochs = 100
 
 # Enable fp16/bf16 training (set bf16 to True with an A100)
 fp16 = False
@@ -100,7 +100,7 @@ warmup_ratio = 0.03
 group_by_length = True
 
 # Save checkpoint every X updates steps
-save_steps = 25
+save_steps = 100000
 
 # Log every X updates steps
 logging_steps = 5
