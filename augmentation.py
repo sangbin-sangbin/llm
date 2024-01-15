@@ -92,7 +92,7 @@ else:
                 augmented_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
                 sentence_num += 1
         if sentence_num != 11:
-            print("ERROR!!!", sentence_num-1, "text generated.")
+            print("\nERROR!!!", sentence_num-1, "text generated.\n")
 
 with open('../data/augmented_data.json', 'w') as f : 
     json.dump(augmented_data, f, indent=4)
