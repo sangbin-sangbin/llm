@@ -242,7 +242,6 @@ tokenized_dataset = dataset.map(
     batch_size=self.dataset_batch_size,
 )
 
-return tokenized_dataset
 
 res = trainer.evaluate(eval_dataset=test_dataset)
 
