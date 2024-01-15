@@ -10,7 +10,7 @@ from transformers import (
     logging,
 )
 from peft import LoraConfig, PeftModel
-from trl import SFTTrainer
+from trl import SFTTrainer, get_formatting_func_from_dataset
 import random
 import json
 from datasets import Dataset
