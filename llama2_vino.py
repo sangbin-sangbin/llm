@@ -28,4 +28,4 @@ while True:
     text = "How can I buy BMW?"#input("question: ")
     encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
     res = compiled_model(encoded_input.data)
-    print(tok.batch_decode(res, skip_special_tokens=True)[0])
+    print(fine_tuned_tokenizer.batch_decode(res, skip_special_tokens=True)[0])
