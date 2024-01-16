@@ -29,7 +29,7 @@ while True:
     encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
     res = compiled_model(encoded_input.data)
 
-    print(res.shape)    
+    print(type(res))    
     #print(fine_tuned_tokenizer.decode(res))
     print(fine_tuned_tokenizer.convert_tokens_to_string(res))
     print(fine_tuned_tokenizer.convert_tokens_to_string(fine_tuned_tokenizer.convert_ids_to_tokens(res)))
