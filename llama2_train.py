@@ -195,7 +195,8 @@ training_arguments = TrainingArguments(
     evaluation_strategy="steps",
     eval_steps=eval_steps,
     do_eval=True,
-    report_to="tensorboard"
+    report_to="tensorboard",
+    load_best_model_at_end=True
 )
 
 # Set supervised fine-tuning parameters
