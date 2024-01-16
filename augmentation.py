@@ -48,12 +48,17 @@ res = input('what augmentation? [no / bert / llm]\n>>> ')
 if res == 'no':
     for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
+    with open('../data/no_augmented_data.json', 'w') as f : 
+        json.dump(augmented_data, f, indent=4)
 elif res == 'bert':
     for question, answer in data:
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 1)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
+
+    with open('../data/bert_augmented_data.json', 'w') as f : 
+        json.dump(augmented_data, f, indent=4)
 else:
     model_name = "../models/llama-2-7b-chat-hf"
 
@@ -96,7 +101,7 @@ else:
         if sentence_num - 1 != text_num:
             print("\nERROR!!!", sentence_num - 1, "text generated.\n")
 
-with open('../data/augmented_data.json', 'w') as f : 
-    json.dump(augmented_data, f, indent=4)
+    with open('../data/llm_augmented_data.json', 'w') as f : 
+        json.dump(augmented_data, f, indent=4)
     
 
