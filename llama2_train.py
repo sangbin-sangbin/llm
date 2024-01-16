@@ -100,7 +100,7 @@ warmup_ratio = 0.03
 group_by_length = True
 
 # Save checkpoint every X updates steps
-save_steps = 100000
+save_steps = 500
 
 # Log every X updates steps
 logging_steps = 500
@@ -196,7 +196,7 @@ training_arguments = TrainingArguments(
     eval_steps=eval_steps,
     do_eval=True,
     report_to="tensorboard",
-    load_best_model_at_end=True
+    load_best_model_at_end=True,
 )
 
 # Set supervised fine-tuning parameters
