@@ -16,6 +16,14 @@ device = widgets.Dropdown(
 
 compiled_model = core.compile_model(save_model_path, device.value)
 
-# Compiled model call is performed using the same parameters as for the original model
-res = compiled_model(encoded_input.data)[0]
-print(res)
+fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, return_dict=True)
+fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
+fine_tuned_tokenizer.padding_side = "right"
+
+while True:
+    text = input("question: ")
+    encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
+
+    res = compiled_model(encoded_input.data)[0]
+    print(res)
