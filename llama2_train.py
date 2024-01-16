@@ -105,7 +105,7 @@ save_steps = 100000
 # Log every X updates steps
 logging_steps = 500
 
-eval_steps = 1000
+eval_steps = 500
 
 ################################################################################
 # SFT parameters
@@ -209,7 +209,7 @@ trainer = SFTTrainer(
     tokenizer=tokenizer,
     args=training_arguments,
     packing=packing,
-    callbacks = [EarlyStoppingCallback(early_stopping_patience=1)]
+    callbacks = [EarlyStoppingCallback(early_stopping_patience=4)]
 
 )
 
