@@ -1,7 +1,8 @@
 import openvino as ov
 import ipywidgets as widgets
 from pathlib import Path
-from transformers import AutoTokenizer
+from optimum.intel.openvino import OVModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
 
 
 model_name = "NousResearch/Llama-2-7b-chat-hf"
@@ -18,6 +19,21 @@ device = widgets.Dropdown(
 )
 
 compiled_model = core.compile_model(save_model_path, device.value)
+
+
+ov_config = {"PERFORMANCE_HINT": "LATENCY", "NUM_STREAMS": "1", "CACHE_DIR": ""}
+
+ov_model = OVModelForCausalLM.from_pretrained(
+    model_name,
+    device=device.value,
+    ov_config=ov_config,
+    config=AutoConfig.from_pretrained(model_name, trust_remote_code=True),
+    trust_remote_code=True,
+)
+
+
+
+
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, return_dict=True)
 fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
