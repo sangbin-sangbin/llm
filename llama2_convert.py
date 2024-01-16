@@ -1,52 +1,47 @@
-from pathlib import Path
-import numpy as np
-import torch
-from transformers import (
-    AutoModelForSequenceClassification,
-    AutoModelForCausalLM,
-    AutoTokenizer
-)
-from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoConfig
+from optimum.intel import OVQuantizer
+from optimum.intel.openvino import OVModelForCausalLM
 import openvino as ov
+from pathlib import Path
+import shutil
+import torch
+import logging
+import nncf
+import gc
+from converter import converters
 
-# The model that you want to train from the Hugging Face hub
-model_name = "../models/llama-2-7b-chat-hf"
+model_configuration = SUPPORTED_LLM_MODELS['llama-2-chat-7b']
+nncf.set_log_level(logging.ERROR)
 
-# Fine-tuned model name
-new_model = "../models/new-llama2-model"
+pt_model_id = model_configuration["model_id"]
+pt_model_name = 'llama-2-chat-7b'.split("-")[0]
+model_type = AutoConfig.from_pretrained(pt_model_id, trust_remote_code=True).model_type
+fp16_model_dir = Path('../models')
 
-device_map = {"": 0}
+def convert_to_fp16():
+    if (fp16_model_dir / "openvino_model.xml").exists():
+        return
+    if not model_configuration["remote"]:
+        print(1111111)
+        ov_model = OVModelForCausalLM.from_pretrained(
+            pt_model_id, export=True, compile=False
+        )
+        ov_model.half()
+        ov_model.save_pretrained(fp16_model_dir)
+        del ov_model
+    else:
+        print(2222222)
+        model_kwargs = {}
+        if "revision" in model_configuration:
+            model_kwargs["revision"] = model_configuration["revision"]
+        model = AutoModelForCausalLM.from_pretrained(
+            model_configuration["model_id"],
+            torch_dtype=torch.float32,
+            trust_remote_code=True,
+            **model_kwargs
+        )
+        converters[pt_model_name](model, fp16_model_dir)
+        del model
+    gc.collect()
 
-# Reload model in FP16 and merge it with LoRA weights
-base_model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    low_cpu_mem_usage=True,
-    return_dict=True,
-    torch_dtype=torch.float16,
-    device_map=device_map,
-    torchscript=True
-)
-
-fine_tuned_model = PeftModel.from_pretrained(base_model, new_model)
-fine_tuned_model = fine_tuned_model.merge_and_unload()
-
-# Reload tokenizer to save it
-fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, return_dict=True)
-fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
-fine_tuned_tokenizer.padding_side = "right"
-
-text = "Which Remote Services can I use for my vehicle in conjunction with the My BMW App?"
-
-encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
-
-save_model_path = Path('../models/vino_model.xml')
-
-if not save_model_path.exists():
-    encoded_input.to('cuda')
-    ov_model = ov.convert_model(fine_tuned_model, example_input=dict(encoded_input))
-    ov.save_model(ov_model, save_model_path)
-else:
-    raise Exception("model already exists!")
-
-    
+convert_to_fp16()

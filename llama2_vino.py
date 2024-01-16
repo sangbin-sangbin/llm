@@ -1,14 +1,5 @@
-import openvino as ov
-import ipywidgets as widgets
-from pathlib import Path
-from optimum.intel.openvino import OVModelForCausalLM
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
+from ov_llm_model import model_classes
 
-
-model_name = "NousResearch/Llama-2-7b-chat-hf"
-model_dir = "../Desktop"
-
-save_model_path = Path('../Desktop/vino_model.xml')
 
 core = ov.Core()
 device = widgets.Dropdown(
@@ -18,9 +9,43 @@ device = widgets.Dropdown(
     disabled=False,
 )
 
+available_models = []
+if int4_model_dir.exists():
+    available_models.append("INT4")
+if int8_model_dir.exists():
+    available_models.append("INT8")
+if fp16_model_dir.exists():
+    available_models.append("FP16")
+
+model_to_run = widgets.Dropdown(
+    options=available_models,
+    value=available_models[0],
+    description="Model to run:",
+    disabled=False,
+)
+
+from transformers import AutoTokenizer
+
+if model_to_run.value == "INT4":
+    model_dir = int4_model_dir
+elif model_to_run.value == "INT8":
+    model_dir = int8_model_dir
+else:
+    model_dir = fp16_model_dir
+print(f"Loading model from {model_dir}")
+
+model_name = model_configuration["model_id"]
+class_key = model_id.value.split("-")[0]
 ov_config = {"PERFORMANCE_HINT": "LATENCY", "NUM_STREAMS": "1", "CACHE_DIR": ""}
 
-ov_model = OVModelForCausalLM.from_pretrained(
+tok = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+
+model_class = (
+    OVModelForCausalLM
+    if not model_configuration["remote"]
+    else model_classes[class_key]
+)
+ov_model = model_class.from_pretrained(
     model_dir,
     device=device.value,
     ov_config=ov_config,
@@ -28,13 +53,8 @@ ov_model = OVModelForCausalLM.from_pretrained(
     trust_remote_code=True,
 )
 
-
-fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, return_dict=True)
-fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
-fine_tuned_tokenizer.padding_side = "right"
-
-text = "How can I buy BMW?"#input("question: ")
-encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
-res = compiled_model.generate(**encoded_input, max_new_tokens=2)
-print(fine_tuned_tokenizer.batch_decode(res, skip_special_tokens=True)[0])
+tokenizer_kwargs = model_configuration.get("tokenizer_kwargs", {})
+test_string = "2 + 2 ="
+input_tokens = tok(test_string, return_tensors="pt", **tokenizer_kwargs)
+answer = ov_model.generate(**input_tokens, max_new_tokens=2)
+print(tok.batch_decode(answer, skip_special_tokens=True)[0])
