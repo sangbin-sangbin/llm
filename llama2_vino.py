@@ -1,7 +1,10 @@
 import openvino as ov
 import ipywidgets as widgets
 from pathlib import Path
+from transformers import AutoTokenizer
 
+
+model_name = "../models/llama-2-7b-chat-hf"
 
 save_model_path = Path('../Desktop/vino_model.xml')
 
