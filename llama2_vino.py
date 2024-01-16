@@ -30,6 +30,6 @@ while True:
     res = compiled_model(encoded_input.data)[0]
 
     print(res.shape)    
-    print(fine_tuned_tokenizer.decode(res))
+    #print(fine_tuned_tokenizer.decode(res))
     print(fine_tuned_tokenizer.convert_tokens_to_string(res))
     print(fine_tuned_tokenizer.convert_tokens_to_string(fine_tuned_tokenizer.convert_ids_to_tokens(res)))
