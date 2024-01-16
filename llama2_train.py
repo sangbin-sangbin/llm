@@ -8,6 +8,7 @@ from transformers import (
     TrainingArguments,
     pipeline,
     logging,
+    EarlyStoppingCallback
 )
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
@@ -208,6 +209,8 @@ trainer = SFTTrainer(
     tokenizer=tokenizer,
     args=training_arguments,
     packing=packing,
+    callbacks = [EarlyStoppingCallback(early_stopping_patience=1)]
+
 )
 
 # Train model
