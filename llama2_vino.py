@@ -27,7 +27,7 @@ fine_tuned_tokenizer.padding_side = "right"
 while True:
     text = "How can I buy BMW?"#input("question: ")
     encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
-    res = compiled_model(encoded_input.data)
+    res = compiled_model(encoded_input.data).to_dict()
 
     print(type(res))    
     print(type(res[0]))      
