@@ -25,9 +25,9 @@ fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
 fine_tuned_tokenizer.padding_side = "right"
 
 while True:
-    text = input("question: ")
+    text = "How can I buy bmw?"#input("question: ")
     encoded_input = fine_tuned_tokenizer(text, return_tensors='pt')
-    res = compiled_model(encoded_input.data)[0]
+    res = compiled_model(encoded_input.data)
 
     print(res.shape)    
     #print(fine_tuned_tokenizer.decode(res))
