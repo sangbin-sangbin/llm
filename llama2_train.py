@@ -11,7 +11,7 @@ from transformers import (
 )
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
-import random
+from random import shuffle
 import json
 from datasets import Dataset
 
@@ -121,6 +121,7 @@ device_map = {"": 0}
 
 # Load dataset (you can process it here)
 data_list = json.load(open('../data/augmented_data.json'))
+shuffle(data_list)
 data_len = len(data_list)
 
 train_data_list = data_list[:int(data_len*0.9)]

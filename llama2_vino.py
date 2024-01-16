@@ -3,7 +3,7 @@ import ipywidgets as widgets
 from pathlib import Path
 
 
-save_model_path = Path('./vino_model.xml')
+save_model_path = Path('../Desktop/vino_model.xml')
 
 core = ov.Core()
 
