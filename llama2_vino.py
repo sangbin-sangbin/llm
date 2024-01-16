@@ -37,4 +37,4 @@ while True:
     print(res[0][0].shape)
     print(res[0][0][0].shape)
 
-    print(fine_tuned_tokenizer.convert_ids_to_tokens(res))
+    print(fine_tuned_tokenizer.convert_ids_to_tokens(res[0][0]))
