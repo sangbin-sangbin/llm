@@ -13,7 +13,7 @@ save_model_path = Path('../Desktop/vino_model.xml')
 core = ov.Core()
 device = widgets.Dropdown(
     options=core.available_devices + ["AUTO"],
-    value="GPU",
+    value="CPU",
     description="Device:",
     disabled=False,
 )
