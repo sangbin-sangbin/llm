@@ -30,5 +30,5 @@ while True:
     res = compiled_model(encoded_input.data).to_dict()
 
     print(type(res))    
-    print(res[0].keys())  
+    print(res.keys())  
     print(fine_tuned_tokenizer.convert_ids_to_tokens(res))
