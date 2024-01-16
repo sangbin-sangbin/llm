@@ -9,6 +9,7 @@ import logging
 import nncf
 import gc
 from converter import converters
+from config import SUPPORTED_LLM_MODELS
 
 model_configuration = SUPPORTED_LLM_MODELS['llama-2-chat-7b']
 nncf.set_log_level(logging.ERROR)
