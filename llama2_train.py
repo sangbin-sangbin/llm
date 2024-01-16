@@ -210,7 +210,7 @@ trainer = SFTTrainer(
     tokenizer=tokenizer,
     args=training_arguments,
     packing=packing,
-    callbacks = [EarlyStoppingCallback(early_stopping_patience=4)]
+    callbacks = [EarlyStoppingCallback(early_stopping_patience=2)]
 
 )
 

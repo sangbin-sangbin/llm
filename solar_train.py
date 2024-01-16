@@ -8,6 +8,7 @@ from transformers import (
     TrainingArguments,
     pipeline,
     logging,
+    EarlyStoppingCallback
 )
 from peft import LoraConfig, PeftModel
 from trl import SFTTrainer
@@ -15,12 +16,11 @@ from random import shuffle
 import json
 from datasets import Dataset
 
-
 # The model that you want to train from the Hugging Face hub
-model_name = "Upstage/SOLAR-10.7B-Instruct-v1.0"
+model_name = "../models/llama-2-7b-chat-hf"
 
 # Fine-tuned model name
-new_model = "../models/new-solar-model"
+new_model = "../models/new-llama2-model"
 
 ################################################################################
 # QLoRA parameters
@@ -100,12 +100,12 @@ warmup_ratio = 0.03
 group_by_length = True
 
 # Save checkpoint every X updates steps
-save_steps = 100000
+save_steps = 500
 
 # Log every X updates steps
 logging_steps = 500
 
-eval_steps = 1000
+eval_steps = 500
 
 ################################################################################
 # SFT parameters
@@ -195,7 +195,8 @@ training_arguments = TrainingArguments(
     evaluation_strategy="steps",
     eval_steps=eval_steps,
     do_eval=True,
-    report_to="tensorboard"
+    report_to="tensorboard",
+    load_best_model_at_end=True,
 )
 
 # Set supervised fine-tuning parameters
@@ -209,6 +210,8 @@ trainer = SFTTrainer(
     tokenizer=tokenizer,
     args=training_arguments,
     packing=packing,
+    callbacks = [EarlyStoppingCallback(early_stopping_patience=4)]
+
 )
 
 # Train model
