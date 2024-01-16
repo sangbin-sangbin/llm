@@ -13,7 +13,7 @@ import openvino as ov
 model_name = "../models/llama-2-7b-chat-hf"
 
 # Fine-tuned model name
-new_model = "../models/new-model"
+new_model = "../models/new-llama2-model"
 
 device_map = {"": 0}
 
