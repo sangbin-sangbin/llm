@@ -35,5 +35,8 @@ for test_string in test_strings:
 while True:
     question = input("question: ")
     input_tokens = tokenizer(f"<s>[INST] {question} [/INST] ", return_tensors="pt", add_special_tokens=False)
+    start = time.time()
     answer = ov_model.generate(**input_tokens, max_new_tokens=1024)
+    end = time.time()
     print(tokenizer.batch_decode(answer, skip_special_tokens=True)[0])
+    print("elapsed time:", end - start)
