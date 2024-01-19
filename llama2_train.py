@@ -232,6 +232,7 @@ trainer.train()
 # Save trained model
 trainer.model.save_pretrained(new_model)
 
+'''
 def tokenize(element):
     outputs = tokenizer(
         element['text'],
@@ -260,3 +261,4 @@ tokenized_unseen_test_dataset = unseen_test_dataset.map(
 )
 res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset)
 print('loss_for_unseen_data:', res['eval_loss'])
+'''
