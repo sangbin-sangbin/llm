@@ -23,7 +23,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
     device_map=device_map,
 )
 ov_model = OVModelForCausalLM.from_pretrained(
-    fine_tuned_model, export=True, compile=False
+    model_name, export=True, compile=False
 )
 
 fine_tuned_model = PeftModel.from_pretrained(ov_model, new_model)
