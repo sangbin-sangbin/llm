@@ -110,5 +110,3 @@ else:
     print(len(augmented_data), "data created")
     with open('../data/llm_augmented_data.json', 'w') as f : 
         json.dump(augmented_data, f, indent=4)
-    
-
