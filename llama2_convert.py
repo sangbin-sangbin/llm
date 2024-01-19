@@ -14,12 +14,11 @@ from config import SUPPORTED_LLM_MODELS
 model_configuration = SUPPORTED_LLM_MODELS['llama-2-chat-7b']
 nncf.set_log_level(logging.ERROR)
 
-pt_model_name = 'llama-2-chat-7b'.split("-")[0]
 model_type = AutoConfig.from_pretrained('../models/llama-2-7b-chat-hf', trust_remote_code=True).model_type
-fp16_model_dir = Path('../models/llama2_vino')
+model_dir = Path('../models/llama2_vino')
 
 ov_model = OVModelForCausalLM.from_pretrained(
     '../models/llama-2-7b-chat-hf', export=True, compile=False
 )
 ov_model.half()
-ov_model.save_pretrained(fp16_model_dir)
+ov_model.save_pretrained(model_dir) 
