@@ -9,6 +9,7 @@ from transformers import (
 from peft import PeftModel
 import json
 import re
+import time
 
 
 # The model that you want to train from the Hugging Face hub
@@ -40,10 +41,18 @@ fine_tuned_tokenizer.padding_side = "right"
 
 logging.set_verbosity(logging.CRITICAL)
 
+question = "Which Remote Services can I use for my vehicle in conjunction with the My BMW App?"
+pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
+start = time.time()
+result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
+end = time.time()
+print(result)
+print("elapsed time:", end - start)
+
 while True:
-    prompt = input('question: ')
+    question = input('question: ')
     pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
-    result = pipe(f"<s>[INST] {prompt} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {prompt} [/INST]", '').replace('</s>', '')
+    result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
     re.sub(r' +', ' ', result)
     re.sub(r'\s{2,}', '\n', result)
 
