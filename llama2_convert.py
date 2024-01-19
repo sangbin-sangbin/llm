@@ -1,6 +1,8 @@
 from optimum.intel.openvino import OVModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 import openvino as ov
 from pathlib import Path
+import torch
 
 
 model_name = "../models/llama-2-7b-chat-hf"
