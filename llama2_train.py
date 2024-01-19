@@ -136,15 +136,11 @@ train_data_dict = {"text": [item["text"] for item in train_data_list]}
 train_dataset = Dataset.from_dict(train_data_dict)
 
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
+shuffle(seen_test_data_list)
 seen_test_data_len = len(seen_test_data_list)
-val_test_ratio = 0.5
-val_data_list = seen_test_data_list[:int(seen_test_data_len*val_test_ratio)]
-test_data_list = seen_test_data_list[int(seen_test_data_len*val_test_ratio):]
+val_ratio = 0.3
+val_data_list = seen_test_data_list[:int(seen_test_data_len*val_ratio)]
 val_dataset = Dataset.from_dict({"text": [item["text"] for item in val_data_list]})
-seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in test_data_list]})
-
-unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
-unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
