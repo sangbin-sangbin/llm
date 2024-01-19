@@ -20,8 +20,6 @@ from datasets import Dataset
 # The model that you want to train from the Hugging Face hub
 model_name = "../models/llama-2-7b-chat-hf"
 
-# Fine-tuned model name
-new_model = "../models/new-llama2-model"
 
 ################################################################################
 # QLoRA parameters
@@ -125,10 +123,13 @@ device_map = {"": 0}
 aug_type = input('what data type? [no / bert / llm]\n>>> ')
 if aug_type == 'no':
     train_data_list = json.load(open('../data/no_augmented_data.json'))
+    new_model = "../models/new-llama2-model-no-aug"
 elif aug_type == 'bert':
     train_data_list = json.load(open('../data/bert_augmented_data.json'))
+    new_model = "../models/new-llama2-model-bert-aug"
 else:
     train_data_list = json.load(open('../data/llm_augmented_data.json'))
+    new_model = "../models/new-llama2-model-llama-aug"
 
 shuffle(train_data_list)
 train_data_dict = {"text": [item["text"] for item in data_list]}
