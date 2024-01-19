@@ -23,7 +23,6 @@ def convert_to_fp16():
     if (fp16_model_dir / "openvino_model.xml").exists():
         return
     if not model_configuration["remote"]:
-        print(1111111)
         ov_model = OVModelForCausalLM.from_pretrained(
             '../models/llama-2-7b-chat-hf', export=True, compile=False
         )
@@ -31,7 +30,6 @@ def convert_to_fp16():
         ov_model.save_pretrained(fp16_model_dir)
         del ov_model
     else:
-        print(2222222)
         model_kwargs = {}
         if "revision" in model_configuration:
             model_kwargs["revision"] = model_configuration["revision"]
