@@ -132,8 +132,8 @@ else:
     new_model = "../models/new-llama2-model-llama-aug"
 
 shuffle(train_data_list)
-train_data_dict = {"text": [item["text"] for item in data_list]}
-train_dataset = Dataset.from_dict(data_dict)
+train_data_dict = {"text": [item["text"] for item in train_data_list]}
+train_dataset = Dataset.from_dict(train_data_dict)
 
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
 seen_test_data_len = len(seen_test_data_list)
