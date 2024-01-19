@@ -121,7 +121,7 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-data_list = json.load(open('../data/no_augmented_data.json'))
+data_list = json.load(open('../data/augmented_data.json'))
 shuffle(data_list)
 data_len = len(data_list)
 
