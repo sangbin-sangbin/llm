@@ -5,12 +5,14 @@ from optimum.intel.openvino import OVModelForCausalLM
 import time
 
 
+base_model = '../models/llama-2-7b-chat-hf'
+model_dir = Path('../models/llama2_vino')
+
 core = ov.Core()
 device = "CPU"
-model_dir = Path('../models/llama2_vino')
 ov_config = {"PERFORMANCE_HINT": "LATENCY", "NUM_STREAMS": "1", "CACHE_DIR": ""}
 
-tokenizer = AutoTokenizer.from_pretrained('../models/llama-2-7b-chat-hf', trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
 
 ov_model = OVModelForCausalLM.from_pretrained(
     model_dir,
