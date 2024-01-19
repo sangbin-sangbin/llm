@@ -2,13 +2,11 @@ from transformers import AutoTokenizer, AutoConfig
 import openvino as ov
 from pathlib import Path
 from optimum.intel.openvino import OVModelForCausalLM
-from config import SUPPORTED_LLM_MODELS
 
 
 core = ov.Core()
 device = "CPU"
 model_dir = Path('../models/llama2_vino')
-
 ov_config = {"PERFORMANCE_HINT": "LATENCY", "NUM_STREAMS": "1", "CACHE_DIR": ""}
 
 tok = AutoTokenizer.from_pretrained('../models/llama-2-7b-chat-hf', trust_remote_code=True)
