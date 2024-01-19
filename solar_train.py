@@ -157,9 +157,7 @@ if compute_dtype == torch.float16 and use_4bit:
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     quantization_config=bnb_config,
-    device_map=device_map,
-    force_download=True,
-    resume_download=False
+    device_map=device_map
 )
 model.config.use_cache = False
 model.config.pretraining_tp = 1
