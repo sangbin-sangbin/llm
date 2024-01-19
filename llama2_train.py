@@ -138,8 +138,8 @@ train_dataset = Dataset.from_dict(train_data_dict)
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
 seen_test_data_len = len(seen_test_data_list)
 val_test_ratio = 0.5
-val_data_list = seen_test_data_list[:seen_test_data_len*val_test_ratio]
-test_data_list = seen_test_data_list[seen_test_data_len*val_test_ratio:]
+val_data_list = seen_test_data_list[:int(seen_test_data_len*val_test_ratio)]
+test_data_list = seen_test_data_list[int(seen_test_data_len*val_test_ratio):]
 val_dataset = Dataset.from_dict({"text": [item["text"] for item in val_data_list]})
 seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in test_data_list]})
 
