@@ -20,13 +20,17 @@ ov_model = OVModelForCausalLM.from_pretrained(
     trust_remote_code=True,
 )
 
-test_string = "Which Remote Services can I use for my vehicle in conjunction with the My BMW App?"
-input_tokens = tokenizer(f"<s>[INST] {test_string} [/INST] ", return_tensors="pt", add_special_tokens=False)
-start = time.time()
-result = tokenizer.batch_decode(ov_model.generate(**input_tokens, max_new_tokens=1024), skip_special_tokens=True)[0]
-end = time.time()
-print(result)
-print("elapsed time:", end - start)
+test_strings = [
+    "Which Remote Services can I use for my vehicle in conjunction with the My BMW App?",
+    "Who are you?"
+]
+for test_string in test_strings:
+    input_tokens = tokenizer(f"<s>[INST] {test_string} [/INST] ", return_tensors="pt", add_special_tokens=False)
+    start = time.time()
+    result = ov_model.generate(**input_tokens, max_new_tokens=1024)
+    end = time.time()
+    print(tokenizer.batch_decode(result, skip_special_tokens=True)[0])
+    print("elapsed time:", end - start)
 
 while True:
     question = input("question: ")
