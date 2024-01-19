@@ -53,6 +53,7 @@ if aug_type == 'no':
     for i, [question, answer] in enumerate(data):
         if i == seen_data_num: break
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
+    print(len(augmented_data), "data created")
     with open('../data/no_augmented_data.json', 'w') as f :
         json.dump(augmented_data, f, indent=4)
 elif aug_type == 'bert':
@@ -62,7 +63,7 @@ elif aug_type == 'bert':
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 1)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
-
+    print(len(augmented_data), "data created")
     with open('../data/bert_augmented_data.json', 'w') as f:
         json.dump(augmented_data, f, indent=4)
 else:
@@ -106,7 +107,7 @@ else:
                 sentence_num += 1
         if sentence_num - 1 != text_num:
             print("\nERROR!!!", sentence_num - 1, "text generated.\n")
-
+    print(len(augmented_data), "data created")
     with open('../data/llm_augmented_data.json', 'w') as f : 
         json.dump(augmented_data, f, indent=4)
     
