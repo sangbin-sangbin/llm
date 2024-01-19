@@ -122,18 +122,28 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-data_list = json.load(open('../data/augmented_data.json'))
-shuffle(data_list)
-data_len = len(data_list)
+aug_type = input('what data type? [no / bert / llm]\n>>> ')
+if aug_type == 'no':
+    train_data_list = json.load(open('../data/no_augmented_data.json'))
+elif aug_type == 'bert':
+    train_data_list = json.load(open('../data/bert_augmented_data.json'))
+else:
+    train_data_list = json.load(open('../data/llm_augmented_data.json'))
 
-train_data_list = data_list[:int(data_len*0.9)]
-val_data_list = data_list[int(data_len*0.9):]
+shuffle(train_data_list)
+train_data_dict = {"text": [item["text"] for item in data_list]}
+train_dataset = Dataset.from_dict(data_dict)
 
-train_data_dict = {"text": [item["text"] for item in train_data_list]}
-val_data_dict = {"text": [item["text"] for item in val_data_list]}
+seen_test_data_list = json.load(open('../data/seen_test_data.json'))
+seen_test_data_len = len(seen_test_data_list)
+val_test_ratio = 0.5
+val_data_list = seen_test_data_list[:seen_test_data_len*val_test_ratio]
+test_data_list = seen_test_data_list[seen_test_data_len*val_test_ratio:]
+val_dataset = Dataset.from_dict({"text": [item["text"] for item in val_data_list]})
+seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in test_data_list]})
 
-train_dataset = Dataset.from_dict(train_data_dict)
-val_dataset = Dataset.from_dict(val_data_dict)
+unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
+unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
@@ -221,8 +231,6 @@ trainer.train()
 # Save trained model
 trainer.model.save_pretrained(new_model)
 
-test_dataset = Dataset.from_dict({"text": [item["text"] for item in json.load(open('../data/test_data.json'))]})
-
 def tokenize(element):
     outputs = tokenizer(
         element['text'],
@@ -236,12 +244,18 @@ def tokenize(element):
 
     return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
 
-tokenized_dataset = test_dataset.map(
+tokenized_seen_test_dataset = seen_test_dataset.map(
     tokenize,
     batched=True,
     remove_columns=test_dataset.column_names
 )
+res = trainer.evaluate(eval_dataset=tokenized_seen_test_dataset)
+print('loss_for_seen_data:', res['eval_loss'])
 
-res = trainer.evaluate(eval_dataset=tokenized_dataset)
-
-print('eval_loss:', res['eval_loss'])
+tokenized_unseen_test_dataset = unseen_test_dataset.map(
+    tokenize,
+    batched=True,
+    remove_columns=test_dataset.column_names
+)
+res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset)
+print('loss_for_unseen_data:', res['eval_loss'])

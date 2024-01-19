@@ -11,6 +11,7 @@ from transformers import (
 from peft import PeftModel
 import re
 
+
 tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 unmasker = pipeline('fill-mask', model='bert-base-cased')
 
@@ -41,23 +42,28 @@ def random_replace(_input_text, n):
     return res
 
 data = json.load(open('../data/data.json'))
+data_len = len(data)
+seen_data_ratio = 0.9
+seen_data_num = int(data_len * seen_data_ratio)
 augmented_data = []
 
-res = input('what augmentation? [no / bert / llm]\n>>> ')
+aug_type = input('what augmentation? [no / bert / llm]\n>>> ')
 
-if res == 'no':
-    for question, answer in data:
+if aug_type == 'no':
+    for i, [question, answer] in enumerate(data):
+        if i == seen_data_num: break
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
-    with open('../data/no_augmented_data.json', 'w') as f : 
+    with open('../data/no_augmented_data.json', 'w') as f :
         json.dump(augmented_data, f, indent=4)
-elif res == 'bert':
-    for question, answer in data:
+elif aug_type == 'bert':
+    for i, [question, answer] in enumerate(data):
+        if i == seen_data_num: break
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 1)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 2)} [/INST] {answer} </s>"} )
         augmented_data.append( {'text' : f"<s>[INST] {random_replace(question, 3)} [/INST] {answer} </s>"} )
 
-    with open('../data/bert_augmented_data.json', 'w') as f : 
+    with open('../data/bert_augmented_data.json', 'w') as f:
         json.dump(augmented_data, f, indent=4)
 else:
     model_name = "../models/llama-2-7b-chat-hf"
@@ -83,8 +89,8 @@ else:
 
     text_num = 10
 
-    for question, answer in data:
-        print(question)
+    for i, [question, answer] in enumerate(data):
+        if i == seen_data_num: break
         augmented_data.append( {'text' : f"<s>[INST] {question} [/INST] {answer} </s>"} )
 
         pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=1024)
