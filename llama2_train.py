@@ -101,12 +101,12 @@ warmup_ratio = 0.03
 group_by_length = True
 
 # Save checkpoint every X updates steps
-save_steps = 500
+save_steps = 100
 
 # Log every X updates steps
-logging_steps = 500
+logging_steps = 100
 
-eval_steps = 500
+eval_steps = 100
 
 ################################################################################
 # SFT parameters
