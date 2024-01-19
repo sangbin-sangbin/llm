@@ -3,6 +3,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import openvino as ov
 from pathlib import Path
 import torch
+from peft import PeftModel
 
 
 model_name = "../models/llama-2-7b-chat-hf"
