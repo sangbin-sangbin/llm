@@ -176,6 +176,7 @@ model.config.pretraining_tp = 1
 
 # Load LLaMA tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
@@ -251,6 +252,7 @@ trainer.train()
 
 # Save trained model
 trainer.model.save_pretrained(new_model)
+tokenizer.save_pretrained(new_model)
 
 tokenized_seen_test_dataset = seen_test_dataset.map(
     tokenize,
