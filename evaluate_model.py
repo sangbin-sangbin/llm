@@ -63,13 +63,13 @@ def blue_evaluation(dataset):
             pbar.update(1)
             if len(batch) == batch_size:
                 res = pipe(batch)
-                for p in res:
-                    predictions.append(p[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
+                for i, p in enumerate(res):
+                    predictions.append(p[0]['generated_text'].replace(batch[i], '').replace('</s>', ''))
                 batch = []
         if len(batch) > 0:
             res = pipe(batch)
-            for p in res:
-                predictions.append(p[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
+            for i, p in enumerate(res):
+                predictions.append(p[0]['generated_text'].replace(batch[i], '').replace('</s>', ''))
             batch = []
 
     bleu = evaluate.load("bleu")
