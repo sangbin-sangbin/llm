@@ -49,7 +49,7 @@ eval_results_for_seen_data = task_evaluator.compute(
     model_or_pipeline=fine_tuned_model,
     tokenizer=fine_tuned_tokenizer,
     data=seen_test_dataset,
-    metric='accuracy'
+    metric='bleu'
 )
 print("results for seen data")
 print(eval_results_for_seen_data)
@@ -58,7 +58,7 @@ eval_results_for_unseen_data = task_evaluator.compute(
     model_or_pipeline=fine_tuned_model,
     tokenizer=fine_tuned_tokenizer,
     data=unseen_test_dataset,
-    metric='accuracy'
+    metric='bleu'
 )
 print("results for unseen data")
 print(eval_results_for_unseen_data)
