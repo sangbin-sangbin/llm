@@ -136,7 +136,6 @@ train_data_dict = {"text": [item["text"] for item in train_data_list]}
 train_dataset = Dataset.from_dict(train_data_dict)
 
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
-shuffle(seen_test_data_list)
 seen_test_data_len = len(seen_test_data_list)
 val_ratio = 0.3
 val_data_list = seen_test_data_list[:int(seen_test_data_len*val_ratio)]
@@ -146,7 +145,6 @@ seen_data_list = seen_test_data_list[int(seen_test_data_len*val_ratio):]
 seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in seen_data_list]})
 
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
-shuffle(unseen_test_data_list)
 unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
 # Load tokenizer and model with QLoRA configuration

@@ -9,6 +9,7 @@ from transformers import (
 from peft import PeftModel
 import json
 import re
+from random import shuffle
 
 
 model_name = "../models/llama-2-7b-chat-hf"
@@ -57,8 +58,11 @@ for i, [question, answer] in enumerate(data):
                 unseen_test_data.append( {'text' : f"<s>[INST] {rephrased_sentence[len(str(sentence_num))+2:]} [/INST] {answer} </s>"} )
             sentence_num += 1
 
+
+shuffle(seen_test_data)
 with open('../data/seen_test_data.json', 'w') as f : 
     json.dump(seen_test_data, f, indent=4)
 
+shuffle(unseen_test_data)
 with open('../data/unseen_test_data.json', 'w') as f : 
     json.dump(unseen_test_data, f, indent=4)
