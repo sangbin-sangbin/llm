@@ -37,8 +37,6 @@ fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
 fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
 fine_tuned_tokenizer.padding_side = "right"
 
-task_evaluator = evaluator("text-generation")
-
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
 
