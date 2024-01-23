@@ -15,7 +15,7 @@ from evaluate import evaluator
 
 model_name = "../models/llama-2-7b-chat-hf"
 
-new_model = "../models/new-llama2-model"
+new_model = "../models/new-llama2-model-no-aug"
 
 device_map = {"": 0}
 
