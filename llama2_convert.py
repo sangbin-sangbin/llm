@@ -5,7 +5,8 @@ from pathlib import Path
 import torch
 
 
-new_full_model = '../models/new-llama2-full-model'
+new_full_model = '../models/llama-2-7b-chat-hf'
+#new_full_model = '../models/new-llama2-full-model'
 
 vino_dir = '../models/llama2_vino'
 
