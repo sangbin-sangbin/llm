@@ -46,7 +46,7 @@ pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_t
     
 logging.set_verbosity(logging.CRITICAL)
 
-def blue_evaluation(dataset):   
+def bleu_evaluation(dataset):   
     dataset = dataset[:8]
     predictions = [] 
     references = []
@@ -73,15 +73,20 @@ def blue_evaluation(dataset):
                 predictions.append(p[0]['generated_text'].replace(batch[i], '').replace('</s>', ''))
             batch = []
 
+
+    print(predictions)
+    print()
+    print(references)
+    print()
     bleu = evaluate.load("bleu")
     results = bleu.compute(predictions=predictions, references=references)
     return results
 
-eval_results_for_seen_data = blue_evaluation(seen_test_data_list)
+eval_results_for_seen_data = bleu_evaluation(seen_test_data_list)
 print("results for seen data")
 print(eval_results_for_seen_data)
 
-eval_results_for_unseen_data = blue_evaluation(unseen_test_data_list)
+eval_results_for_unseen_data = bleu_evaluation(unseen_test_data_list)
 print("results for unseen data")
 print(eval_results_for_unseen_data)
 

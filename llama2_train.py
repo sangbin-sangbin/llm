@@ -219,7 +219,6 @@ trainer = SFTTrainer(
     args=training_arguments,
     packing=packing,
     callbacks = [EarlyStoppingCallback(early_stopping_patience=2)]
-
 )
 
 # Train model
