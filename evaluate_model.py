@@ -40,25 +40,31 @@ fine_tuned_tokenizer.padding_side = "right"
 task_evaluator = evaluator("text-generation")
 
 seen_test_data_list = json.load(open('../data/seen_test_data.json'))
-seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in seen_test_data_list]})
-
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
-unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
-eval_results_for_seen_data = task_evaluator.compute(
-    model_or_pipeline=fine_tuned_model,
-    tokenizer=fine_tuned_tokenizer,
-    data=seen_test_dataset,
-    metric='bleu'
-)
+pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
+
+def blue_evaluation(dataset):   
+    predictions = [] 
+    references = []
+    for data in dataset:
+        txt = data['text']
+        i = txt.find('[/INST]')
+        q = txt[:i+5]
+        a = txt
+        p = pipe(q)
+        predictions.append(p)
+        references.append([a])
+    bleu = evaluate.load("bleu")
+    results = bleu.compute(predictions=predictions, references=references)
+    return results
+
+eval_results_for_seen_data = blue_evaluation(seen_test_dataset)
 print("results for seen data")
 print(eval_results_for_seen_data)
 
-eval_results_for_unseen_data = task_evaluator.compute(
-    model_or_pipeline=fine_tuned_model,
-    tokenizer=fine_tuned_tokenizer,
-    data=unseen_test_dataset,
-    metric='bleu'
-)
+eval_results_for_unseen_data = blue_evaluation(unseen_test_dataset)
 print("results for unseen data")
 print(eval_results_for_unseen_data)
+
+
