@@ -11,6 +11,7 @@ import json
 import re
 import time
 from evaluate import evaluator
+from datasets import Dataset
 
 
 model_name = "../models/llama-2-7b-chat-hf"
