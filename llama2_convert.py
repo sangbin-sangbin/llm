@@ -7,6 +7,8 @@ import torch
 
 new_full_model = '../models/new-llama2-full-model'
 
+vino_dir = '../models/llama2_vino'
+
 device_map = {"": 0}
 
 ov_model = OVModelForCausalLM.from_pretrained(
