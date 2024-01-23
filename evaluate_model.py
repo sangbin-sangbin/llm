@@ -55,6 +55,7 @@ print(eval_results_for_seen_data)
 
 eval_results_for_unseen_data = task_evaluator.compute(
     model_or_pipeline=fine_tuned_model,
+    tokenizer=fine_tuned_tokenizer,
     data=unseen_test_dataset
 )
 print("results for unseen data")
