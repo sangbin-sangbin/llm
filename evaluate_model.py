@@ -43,21 +43,35 @@ seen_test_data_list = json.load(open('../data/seen_test_data.json'))
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
 
 pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
+    
+logging.set_verbosity(logging.CRITICAL)
 
 def blue_evaluation(dataset):   
     predictions = [] 
     references = []
+    batch_size = 16
     l = len(dataset)
     with tqdm(total=l, desc="Processing", unit="item") as pbar:
-        for data in dataset:
-            txt = data['text']
+        batch = []
+        for i in range(l):
+            txt = dataset[i]['text']
             idx = txt.find('[/INST]')
             q = txt[:idx+7]
-            a = txt
-            p = pipe(q)
-            predictions.append(p)
+            a = txt[idx+7:]
+            batch.append(q)
             references.append([a])
             pbar.update(1)
+            if len(batch) == batch_size:
+                res = pipe(batch)
+                for p in res:
+                    predictions.append(p.replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
+                batch = []
+        if len(batch) > 0:
+            res = pipe(batch)
+            for p in res:
+                predictions.append(p.replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
+            batch = []
+
     bleu = evaluate.load("bleu")
     results = bleu.compute(predictions=predictions, references=references)
     return results
