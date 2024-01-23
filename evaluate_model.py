@@ -62,7 +62,9 @@ def blue_evaluation(dataset):
             references.append([a])
             pbar.update(1)
             if len(batch) == batch_size:
+                print('start')
                 res = pipe(batch)
+                print('end')
                 for p in res:
                     predictions.append(p.replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
                 batch = []
