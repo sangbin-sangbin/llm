@@ -32,7 +32,7 @@ fine_tuned_model = PeftModel.from_pretrained(base_model, new_model)
 fine_tuned_model = fine_tuned_model.merge_and_unload()
 
 # Reload tokenizer to save it
-fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+fine_tuned_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, max_length=1024)
 fine_tuned_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
 fine_tuned_tokenizer.pad_token = fine_tuned_tokenizer.eos_token
 fine_tuned_tokenizer.padding_side = "right"
@@ -54,7 +54,7 @@ print("results for seen data")
 print(eval_results_for_seen_data)
 
 eval_results_for_unseen_data = task_evaluator.compute(
-    model_or_pipeline=model,
+    model_or_pipeline=fine_tuned_model,
     data=unseen_test_dataset
 )
 print("results for unseen data")
