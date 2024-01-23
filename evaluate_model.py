@@ -48,7 +48,7 @@ def blue_evaluation(dataset):
     for data in dataset:
         txt = data['text']
         i = txt.find('[/INST]')
-        q = txt[:i+5]
+        q = txt[:i+7]
         print(q)
         a = txt
         p = pipe(q)
