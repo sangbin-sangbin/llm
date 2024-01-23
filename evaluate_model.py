@@ -61,6 +61,7 @@ def blue_evaluation(dataset):
             batch.append(q)
             references.append([a])
             pbar.update(1)
+            print("1")
             if len(batch) == batch_size:
                 res = pipe(batch)
                 for p in res:
