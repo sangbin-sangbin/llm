@@ -49,6 +49,7 @@ def blue_evaluation(dataset):
         txt = data['text']
         i = txt.find('[/INST]')
         q = txt[:i+5]
+        print(q)
         a = txt
         p = pipe(q)
         predictions.append(p)
