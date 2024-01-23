@@ -48,6 +48,7 @@ unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unsee
 
 eval_results_for_seen_data = task_evaluator.compute(
     model_or_pipeline=fine_tuned_model,
+    tokenizer=fine_tuned_tokenizer,
     data=seen_test_dataset
 )
 print("results for seen data")
