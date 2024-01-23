@@ -246,7 +246,7 @@ tokenized_unseen_test_dataset = unseen_test_dataset.map(
     remove_columns=unseen_test_dataset.column_names
 )
 res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset, metric_key_prefix='unseen_test')
-print('loss_for_unseen_data:', res['eval_loss'])
+print('loss_for_unseen_data:', res['unseen_test_loss'])
 
 # Train model
 trainer.train()
@@ -260,7 +260,7 @@ tokenized_seen_test_dataset = seen_test_dataset.map(
     remove_columns=seen_test_dataset.column_names
 )
 res = trainer.evaluate(eval_dataset=tokenized_seen_test_dataset, metric_key_prefix='seen_test')
-print('loss_for_seen_data:', res['eval_loss'])
+print('loss_for_seen_data:', res['seen_test_loss'])
 
 tokenized_unseen_test_dataset = unseen_test_dataset.map(
     tokenize,
@@ -268,4 +268,4 @@ tokenized_unseen_test_dataset = unseen_test_dataset.map(
     remove_columns=unseen_test_dataset.column_names
 )
 res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset, metric_key_prefix='unseen_test')
-print('loss_for_unseen_data:', res['eval_loss'])
+print('loss_for_unseen_data:', res['unseen_test_loss'])
