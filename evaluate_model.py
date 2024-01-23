@@ -64,7 +64,7 @@ def blue_evaluation(dataset):
             if len(batch) == batch_size:
                 res = pipe(batch)
                 for p in res:
-                    predictions.append(p.replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
+                    predictions.append(p[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', ''))
                 batch = []
         if len(batch) > 0:
             res = pipe(batch)
