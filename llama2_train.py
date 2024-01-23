@@ -228,6 +228,18 @@ trainer = SFTTrainer(
     callbacks = [EarlyStoppingCallback(early_stopping_patience=2)]
 )
 
+def tokenize(element):
+    outputs = tokenizer(
+        element['text'],
+        add_special_tokens=True,
+        truncation=True,
+        padding=False,
+        max_length=1024,
+        return_overflowing_tokens=False,
+        return_length=False,
+    )
+    return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
+
 tokenized_unseen_test_dataset = unseen_test_dataset.map(
     tokenize,
     batched=True,
@@ -241,20 +253,6 @@ trainer.train()
 
 # Save trained model
 trainer.model.save_pretrained(new_model)
-
-
-def tokenize(element):
-    outputs = tokenizer(
-        element['text'],
-        add_special_tokens=True,
-        truncation=True,
-        padding=False,
-        max_length=1024,
-        return_overflowing_tokens=False,
-        return_length=False,
-    )
-
-    return {"input_ids": outputs["input_ids"], "attention_mask": outputs["attention_mask"]}
 
 tokenized_seen_test_dataset = seen_test_dataset.map(
     tokenize,
