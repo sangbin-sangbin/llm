@@ -49,7 +49,7 @@ logging.set_verbosity(logging.CRITICAL)
 def blue_evaluation(dataset):   
     predictions = [] 
     references = []
-    batch_size = 16
+    batch_size = 32
     l = len(dataset)
     with tqdm(total=l, desc="Processing", unit="item") as pbar:
         batch = []
@@ -61,7 +61,6 @@ def blue_evaluation(dataset):
             batch.append(q)
             references.append([a])
             pbar.update(1)
-            print("1")
             if len(batch) == batch_size:
                 res = pipe(batch)
                 for p in res:
