@@ -5,7 +5,7 @@ from optimum.intel.openvino import OVModelForCausalLM
 import time
 
 
-base_model = '../models/new-llama2-full-model'
+base_model = '../models/llama-2-7b-chat-hf'
 model_dir = Path('../models/llama2_vino')
 
 core = ov.Core()
