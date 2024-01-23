@@ -12,6 +12,7 @@ import re
 import time
 import evaluate
 from datasets import Dataset
+from tqdm import tqdm
 
 
 model_name = "../models/llama-2-7b-chat-hf"
@@ -46,15 +47,17 @@ pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_t
 def blue_evaluation(dataset):   
     predictions = [] 
     references = []
-    for data in dataset:
-        txt = data['text']
-        i = txt.find('[/INST]')
-        q = txt[:i+7]
-        print(q)
-        a = txt
-        p = pipe(q)
-        predictions.append(p)
-        references.append([a])
+    l = len(dataset)
+    with tqdm(total=l, desc="Processing", unit="item") as pbar:
+        for data in dataset:
+            txt = data['text']
+            idx = txt.find('[/INST]')
+            q = txt[:idx+7]
+            a = txt
+            p = pipe(q)
+            predictions.append(p)
+            references.append([a])
+            pbar.update(1)
     bleu = evaluate.load("bleu")
     results = bleu.compute(predictions=predictions, references=references)
     return results
