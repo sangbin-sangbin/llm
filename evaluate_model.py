@@ -59,11 +59,11 @@ def blue_evaluation(dataset):
     results = bleu.compute(predictions=predictions, references=references)
     return results
 
-eval_results_for_seen_data = blue_evaluation(seen_test_dataset)
+eval_results_for_seen_data = blue_evaluation(seen_test_data_list)
 print("results for seen data")
 print(eval_results_for_seen_data)
 
-eval_results_for_unseen_data = blue_evaluation(unseen_test_dataset)
+eval_results_for_unseen_data = blue_evaluation(unseen_test_data_list)
 print("results for unseen data")
 print(eval_results_for_unseen_data)
 
