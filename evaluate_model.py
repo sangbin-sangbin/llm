@@ -26,6 +26,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
     low_cpu_mem_usage=True,
     return_dict=True,
     torch_dtype=torch.float16,
+    device_map=device_map
 )
 
 fine_tuned_model = PeftModel.from_pretrained(base_model, new_model)
