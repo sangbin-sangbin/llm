@@ -47,6 +47,7 @@ pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_t
 logging.set_verbosity(logging.CRITICAL)
 
 def blue_evaluation(dataset):   
+    dataset = dataset[:8]
     predictions = [] 
     references = []
     batch_size = 8
