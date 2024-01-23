@@ -47,7 +47,7 @@ unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
 unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
 eval_results_for_seen_data = task_evaluator.compute(
-    model_or_pipeline=model,
+    model_or_pipeline=fine_tuned_model,
     data=seen_test_dataset
 )
 print("results for seen data")
