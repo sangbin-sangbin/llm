@@ -142,6 +142,13 @@ val_ratio = 0.3
 val_data_list = seen_test_data_list[:int(seen_test_data_len*val_ratio)]
 val_dataset = Dataset.from_dict({"text": [item["text"] for item in val_data_list]})
 
+seen_data_list = seen_test_data_list[int(seen_test_data_len*val_ratio):]
+seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in seen_data_list]})
+
+unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
+shuffle(unseen_test_data_list)
+unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
+
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
 
@@ -221,13 +228,21 @@ trainer = SFTTrainer(
     callbacks = [EarlyStoppingCallback(early_stopping_patience=2)]
 )
 
+tokenized_unseen_test_dataset = unseen_test_dataset.map(
+    tokenize,
+    batched=True,
+    remove_columns=test_dataset.column_names
+)
+res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset, metric_key_prefix='unseen_test')
+print('loss_for_unseen_data:', res['eval_loss'])
+
 # Train model
 trainer.train()
 
 # Save trained model
 trainer.model.save_pretrained(new_model)
 
-'''
+
 def tokenize(element):
     outputs = tokenizer(
         element['text'],
@@ -246,7 +261,7 @@ tokenized_seen_test_dataset = seen_test_dataset.map(
     batched=True,
     remove_columns=test_dataset.column_names
 )
-res = trainer.evaluate(eval_dataset=tokenized_seen_test_dataset)
+res = trainer.evaluate(eval_dataset=tokenized_seen_test_dataset, metric_key_prefix='seen_test')
 print('loss_for_seen_data:', res['eval_loss'])
 
 tokenized_unseen_test_dataset = unseen_test_dataset.map(
@@ -254,6 +269,5 @@ tokenized_unseen_test_dataset = unseen_test_dataset.map(
     batched=True,
     remove_columns=test_dataset.column_names
 )
-res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset)
+res = trainer.evaluate(eval_dataset=tokenized_unseen_test_dataset, metric_key_prefix='unseen_test')
 print('loss_for_unseen_data:', res['eval_loss'])
-'''
