@@ -10,7 +10,7 @@ from peft import PeftModel
 import json
 import re
 import time
-from evaluate import evaluator
+import evaluate
 from datasets import Dataset
 
 
