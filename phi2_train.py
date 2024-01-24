@@ -161,7 +161,6 @@ peft_config = LoraConfig(
     bias="none",
     lora_dropout=0.05, # Conventional
     task_type="CAUSAL_LM",
-    target_modules= ["fc1", "fc2" ] # ["Wqkv", "out_proj", "fc1", "fc2" ], - 41M params
 )
 
 # Set training parameters
