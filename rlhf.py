@@ -21,7 +21,7 @@ from scipy.special import softmax
 
 model_name = "../models/llama-2-7b-chat-hf"
 
-new_model = '../models/new-llama2-model-llm-aug'
+new_model = '../models/new-llama2-model-llama-aug'
 
 device_map = {"": 0}
 
