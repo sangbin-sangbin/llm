@@ -78,8 +78,8 @@ ppo_config.train.seq_length = 2048
 question = input('question: ')
 
 result = rlhf_pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
-re.sub(r' +', ' ', result)
-re.sub(r'\s{2,}', '\n', result)
+result = re.sub(r' +', ' ', result)
+result = re.sub(r'\s{2,}', '\n', result)
 print(f'\n{result}\n')
 
 while True:
@@ -87,8 +87,8 @@ while True:
     question = input('question: ')
     
     result = rlhf_pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
-    re.sub(r' +', ' ', result)
-    re.sub(r'\s{2,}', '\n', result)
+    result = re.sub(r' +', ' ', result)
+    result = re.sub(r'\s{2,}', '\n', result)
     print(f'\n{result}\n')
 
     encoded_input = sent_tokenizer(preprocess(question), return_tensors='pt')

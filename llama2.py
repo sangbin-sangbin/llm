@@ -50,8 +50,8 @@ while True:
     question = input('question: ')
     pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
     result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
-    re.sub(r' +', ' ', result)
-    re.sub(r'\s{2,}', '\n', result)
+    result = re.sub(r' +', ' ', result)
+    result = re.sub(r'\s{2,}', '\n', result)
 
     print()
     print(result)
