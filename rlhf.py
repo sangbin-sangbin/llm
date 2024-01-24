@@ -58,7 +58,6 @@ rlhf_model = AutoModelForCausalLM.from_pretrained(
 rlhf_tokenizer = AutoTokenizer.from_pretrained(rlhf_dir, trust_remote_code=True)
 rlhf_pipe = pipeline(task="text-generation", model=rlhf_model, tokenizer=rlhf_tokenizer, max_length=1024)
 
-
 def preprocess(text):
     new_text = []
     for t in text.split(" "):
@@ -71,16 +70,6 @@ sent_tokenizer = AutoTokenizer.from_pretrained(sent_model)
 sent_config = AutoConfig.from_pretrained(sent_model)
 sent_model = AutoModelForSequenceClassification.from_pretrained(sent_model)
 
-text = "I love you"
-
-text = preprocess(text)
-encoded_input = sent_tokenizer(text, return_tensors='pt')
-output = sent_model(**encoded_input)
-scores = output[0][0].detach().numpy()
-scores = softmax(scores)
-print(scores)
-
-
 ppo_config = default_ppo_config()
 ppo_config.model = rlhf_model
 ppo_config.tokenizer = rlhf_tokenizer
@@ -88,15 +77,27 @@ ppo_config.train.seq_length = 16
 
 question = input('question: ')
 
+result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
+re.sub(r' +', ' ', result)
+re.sub(r'\s{2,}', '\n', result)
+print(f'\n{result}\n')
+
 while True:
+    prev_question = question
+    question = input('question: ')
+    
     result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
     re.sub(r' +', ' ', result)
     re.sub(r'\s{2,}', '\n', result)
     print(f'\n{result}\n')
 
-    question = input('question: ')
+    encoded_input = sent_tokenizer(preprocess(question), return_tensors='pt')
+    output = sent_model(**encoded_input)
+    scores = output[0][0].detach().numpy()
+    scores = softmax(scores)
+    reward = scores[2] - scores[0]
 
-    reward = sentiment_task(question)['score']
-
-    trainer = trlx.train(config=config, samples=[question], rewards=[reward])
+    trainer = trlx.train(config=config, samples=[prev_question], rewards=[reward])
     trainer.save_pretrained('../models/rlhf')
+
+    
