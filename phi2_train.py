@@ -18,7 +18,7 @@ from datasets import Dataset
 
 
 # The model that you want to train from the Hugging Face hub
-model_name = "Upstage/SOLAR-10.7B-Instruct-v1.0"
+model_name = "microsoft/phi-2", torch_dtype="auto", trust_remote_code=True
 
 
 ################################################################################
@@ -123,13 +123,13 @@ device_map = {"": 0}
 aug_type = input('which data type? [no / bert / llm]\n>>> ')
 if aug_type == 'no':
     train_data_list = json.load(open('../data/no_augmented_data.json'))
-    new_model = "../models/new-solar-model-no-aug"
+    new_model = "../models/new-phi2-model-no-aug"
 elif aug_type == 'bert':
     train_data_list = json.load(open('../data/bert_augmented_data.json'))
-    new_model = "../models/new-solar-model-bert-aug"
+    new_model = "../models/new-phi2-model-bert-aug"
 else:
     train_data_list = json.load(open('../data/llm_augmented_data.json'))
-    new_model = "../models/new-solar-model-llama-aug"
+    new_model = "../models/new-phi2-model-llama-aug"
 
 shuffle(train_data_list)
 train_data_dict = {"text": [item["text"] for item in train_data_list]}
@@ -169,7 +169,7 @@ if compute_dtype == torch.float16 and use_4bit:
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     quantization_config=bnb_config,
-    device_map=device_map
+    device_map=device_map,
 )
 model.config.use_cache = False
 model.config.pretraining_tp = 1

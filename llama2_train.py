@@ -120,7 +120,7 @@ packing = False
 device_map = {"": 0}
 
 # Load dataset (you can process it here)
-aug_type = input('what data type? [no / bert / llm]\n>>> ')
+aug_type = input('which data type? [no / bert / llm]\n>>> ')
 if aug_type == 'no':
     train_data_list = json.load(open('../data/no_augmented_data.json'))
     new_model = "../models/new-llama2-model-no-aug"
