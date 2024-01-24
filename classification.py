@@ -1,6 +1,8 @@
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer
 from datasets import load_dataset
 from transformers import DataCollatorWithPadding
+import evaluate
+import numpy as np
 
 
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
@@ -21,6 +23,14 @@ model = AutoModelForSequenceClassification.from_pretrained(
 
 output_dir = "../model/classification"
 
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
+accuracy = evaluate.load("accuracy")
+def compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.argmax(predictions, axis=1)
+    return accuracy.compute(predictions=predictions, references=labels)
+
 training_args = TrainingArguments(
     output_dir=output_dir,
     learning_rate=2e-5,
@@ -34,7 +44,6 @@ training_args = TrainingArguments(
     push_to_hub=True,
 )
 
-data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 trainer = Trainer(
     model=model,
