@@ -77,7 +77,7 @@ ppo_config.train.seq_length = 16
 
 question = input('question: ')
 
-result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
+result = rlhf_pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
 re.sub(r' +', ' ', result)
 re.sub(r'\s{2,}', '\n', result)
 print(f'\n{result}\n')
@@ -86,7 +86,7 @@ while True:
     prev_question = question
     question = input('question: ')
     
-    result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
+    result = rlhf_pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
     re.sub(r' +', ' ', result)
     re.sub(r'\s{2,}', '\n', result)
     print(f'\n{result}\n')
@@ -101,7 +101,7 @@ while True:
     trainer.save_pretrained(rlhf_dir)
 
     del rlhf_model
-    
+
     rlhf_model = AutoModelForCausalLM.from_pretrained(
         rlhf_dir,
         low_cpu_mem_usage=True,
