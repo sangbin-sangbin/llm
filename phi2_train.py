@@ -182,12 +182,15 @@ tokenizer.padding_side = "right"
 
 # Load LoRA configuration
 peft_config = LoraConfig(
-    lora_alpha=lora_alpha,
-    lora_dropout=lora_dropout,
-    r=lora_r,
+    r=32,
+    lora_alpha=16,
+    target_modules=[
+    'Wqkv',
+    'out_proj'
+    ],
     bias="none",
+    lora_dropout=0.05, # Conventional
     task_type="CAUSAL_LM",
-    target_modules=["q_proj", "v_proj"],
 )
 
 # Set training parameters
