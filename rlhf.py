@@ -97,7 +97,7 @@ while True:
     scores = softmax(scores)
     reward = scores[2] - scores[0]
 
-    trainer = trlx.train(config=config, samples=[prev_question], rewards=[reward])
+    trainer = trlx.train(config=ppo_config, samples=[prev_question], rewards=[reward])
     trainer.save_pretrained(rlhf_dir)
 
     del rlhf_model
