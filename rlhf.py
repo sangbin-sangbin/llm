@@ -40,6 +40,20 @@ fine_tuned_model = fine_tuned_model.merge_and_unload()
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(new_model, trust_remote_code=True)
 
 
+rlhf_dir = '../models/rlhf'
+fine_tuned_model.save_pretrained(rlhf_dir)
+fine_tuned_tokenizer.save_pretrained(rlhf_dir)
+
+rlhf_model = AutoModelForCausalLM.from_pretrained(
+    rlhf_dir,
+    low_cpu_mem_usage=True,
+    return_dict=True,
+    torch_dtype=torch.float16,
+    device_map=device_map,
+)
+rlhf_tokenizer = AutoTokenizer.from_pretrained(rlhf_dir, trust_remote_code=True)
+rlhf_pipe = pipeline(task="text-generation", model=rlhf_model, tokenizer=rlhf_tokenizer, max_length=1024)
+
 
 def preprocess(text):
     new_text = []
@@ -56,13 +70,10 @@ sent_model = AutoModelForSequenceClassification.from_pretrained(sent_model)
 text = "I love you"
 
 text = preprocess(text)
-encoded_input = tokenizer(text, return_tensors='pt')
-output = model(**encoded_input)
+encoded_input = sent_tokenizer(text, return_tensors='pt')
+output = sent_model(**encoded_input)
 scores = output[0][0].detach().numpy()
 scores = softmax(scores)
-ranking = np.argsort(scores)
-ranking = ranking[::-1]
-
 print(scores)
 
 
@@ -74,7 +85,6 @@ config.train.seq_length = 16
 question = input('question: ')
 
 while True:
-    pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
     result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
     re.sub(r' +', ' ', result)
     re.sub(r'\s{2,}', '\n', result)
