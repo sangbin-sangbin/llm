@@ -20,7 +20,7 @@ import numpy as np
 
 classification_model = AutoModelForSequenceClassification.from_pretrained("../models/classification")
 classification_tokenizer = AutoTokenizer.from_pretrained("../models/classification")
-classify = pipeline(model=classification_model, tokenizer=classification_tokenizer)
+classify = pipeline('sentiment-analysis', model=classification_model, tokenizer=classification_tokenizer)
 
 print(classify("I hate you"))
 print(classify("I love you"))
