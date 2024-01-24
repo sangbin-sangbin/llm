@@ -18,7 +18,7 @@ from datasets import Dataset
 
 
 # The model that you want to train from the Hugging Face hub
-model_name = "microsoft/phi-2", torch_dtype="auto", trust_remote_code=True
+model_name = "microsoft/phi-2"
 
 
 ################################################################################
