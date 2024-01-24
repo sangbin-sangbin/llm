@@ -1,5 +1,6 @@
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer
 from datasets import load_dataset
+from transformers import DataCollatorWithPadding
 
 
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
@@ -32,6 +33,8 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,
     push_to_hub=True,
 )
+
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 trainer = Trainer(
     model=model,
