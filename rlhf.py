@@ -30,6 +30,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
     model_name,
     low_cpu_mem_usage=True,
     return_dict=True,
+    torch_dtype=torch.float16,
     device_map=device_map,
 )
 
@@ -50,6 +51,7 @@ rlhf_model = AutoModelForCausalLM.from_pretrained(
     rlhf_dir,
     low_cpu_mem_usage=True,
     return_dict=True,
+    torch_dtype=torch.float16,
     device_map=device_map,
     attn_implementation="eager",
 )
