@@ -21,7 +21,7 @@ from scipy.special import softmax
 
 model_name = "../models/llama-2-7b-chat-hf"
 
-new_model = '../models/new-llama2-model-no-aug'
+new_model = '../models/new-llama2-model-llm-aug'
 
 device_map = {"": 0}
 
@@ -83,7 +83,7 @@ re.sub(r'\s{2,}', '\n', result)
 print(f'\n{result}\n')
 
 while True:
-    prev_question = question
+    prev_question = f"<s>[INST] {question} [/INST]"
     question = input('question: ')
     
     result = rlhf_pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
