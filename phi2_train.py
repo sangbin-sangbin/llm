@@ -20,6 +20,7 @@ from datasets import Dataset
 # The model that you want to train from the Hugging Face hub
 model_name = "microsoft/phi-2"
 
+
 ################################################################################
 # QLoRA parameters
 ################################################################################
@@ -146,7 +147,32 @@ seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in seen_da
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
 unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto", trust_remote_code=True)
+# Load tokenizer and model with QLoRA configuration
+compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=use_4bit,
+    bnb_4bit_quant_type=bnb_4bit_quant_type,
+    bnb_4bit_compute_dtype=compute_dtype,
+    bnb_4bit_use_double_quant=use_nested_quant,
+)
+
+# Check GPU compatibility with bfloat16
+if compute_dtype == torch.float16 and use_4bit:
+    major, _ = torch.cuda.get_device_capability()
+    if major >= 8:
+        print("=" * 80)
+        print("Your GPU supports bfloat16: accelerate training with bf16=True")
+        print("=" * 80)
+
+# Load base model
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map=device_map,
+)
+model.config.use_cache = False
+model.config.pretraining_tp = 1
 
 # Load LLaMA tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
