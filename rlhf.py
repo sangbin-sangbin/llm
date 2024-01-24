@@ -49,8 +49,10 @@ re.sub(r'\s{2,}', '\n', result)
 print(f'\n{result}\n')
 
 question = input('question: ')
-classification_model = AutoModelForSequenceClassification.from_pretrained("../models/classification")
-classification_tokenizer = AutoTokenizer.from_pretrained("../models/classification")
+
+classification_model_dir = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+classification_model = AutoModelForSequenceClassification.from_pretrained(classification_model_dir)
+classification_tokenizer = AutoTokenizer.from_pretrained(classification_model_dir)
 classify = pipeline(task="sequence-classification", model=classification_model, tokenizer=classification_tokenizer)
 
 
