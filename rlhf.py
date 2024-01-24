@@ -28,6 +28,7 @@ device_map = {"": 0}
 # Reload model in FP16 and merge it with LoRA weights
 base_model = AutoModelForCausalLM.from_pretrained(
     model_name,
+    low_cpu_mem_usage=True,
     return_dict=True,
     device_map=device_map,
 )
@@ -47,6 +48,7 @@ del fine_tuned_tokenizer
 
 rlhf_model = AutoModelForCausalLM.from_pretrained(
     rlhf_dir,
+    low_cpu_mem_usage=True,
     return_dict=True,
     device_map=device_map,
     attn_implementation="eager",
