@@ -98,6 +98,15 @@ while True:
     reward = scores[2] - scores[0]
 
     trainer = trlx.train(config=config, samples=[prev_question], rewards=[reward])
-    trainer.save_pretrained('../models/rlhf')
+    trainer.save_pretrained(rlhf_dir)
 
+    del rlhf_model
     
+    rlhf_model = AutoModelForCausalLM.from_pretrained(
+        rlhf_dir,
+        low_cpu_mem_usage=True,
+        return_dict=True,
+        torch_dtype=torch.float16,
+        device_map=device_map,
+    )
+        
