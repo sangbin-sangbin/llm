@@ -1,4 +1,4 @@
-from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer
+from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer, EarlyStoppingCallback
 from datasets import load_dataset
 from transformers import DataCollatorWithPadding
 import evaluate
