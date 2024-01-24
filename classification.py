@@ -2,6 +2,8 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 from datasets import load_dataset
 
 
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+
 def preprocess_function(examples):
     return tokenizer(examples["text"], truncation=True)
     
@@ -15,8 +17,6 @@ label2id = {"NEGATIVE": 0, "POSITIVE": 1}
 model = AutoModelForSequenceClassification.from_pretrained(
     "distilbert-base-uncased", num_labels=2, id2label=id2label, label2id=label2id
 )
-
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 output_dir = "../model/classification"
 

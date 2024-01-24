@@ -187,6 +187,7 @@ peft_config = LoraConfig(
     r=lora_r,
     bias="none",
     task_type="CAUSAL_LM",
+    target_modules=["q_proj", "v_proj"],
 )
 
 # Set training parameters
