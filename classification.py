@@ -21,7 +21,8 @@ model = AutoModelForSequenceClassification.from_pretrained(
     "distilbert-base-uncased", num_labels=2, id2label=id2label, label2id=label2id
 )
 
-output_dir = "../model/classification"
+output_dir = "./results"
+model_dir = "../model/classification"
 
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
@@ -57,4 +58,4 @@ trainer = Trainer(
 
 trainer.train()
 
-trainer.save_pretrained(output_dir)
+trainer.save_pretrained(model_dir)
