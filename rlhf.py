@@ -7,11 +7,16 @@ from transformers import (
     AutoTokenizer,
     pipeline,
     logging,
+    AutoModelForSequenceClassification,
+    TFAutoModelForSequenceClassification,
+    AutoConfig
 )
 from peft import PeftModel
 import json
 import re
 import time
+import numpy as np
+from scipy.special import softmax
 
 
 model_name = "../models/llama-2-7b-chat-hf"
@@ -34,29 +39,50 @@ fine_tuned_model = fine_tuned_model.merge_and_unload()
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(new_model, trust_remote_code=True)
 
+
+
+def preprocess(text):
+    new_text = []
+    for t in text.split(" "):
+        t = '@user' if t.startswith('@') and len(t) > 1 else t
+        t = 'http' if t.startswith('http') else t
+        new_text.append(t)
+    return " ".join(new_text)
+sent_model = f"cardiffnlp/twitter-roberta-base-sentiment-latest"
+sent_tokenizer = AutoTokenizer.from_pretrained(sent_model)
+sent_config = AutoConfig.from_pretrained(sent_model)
+sent_model = AutoModelForSequenceClassification.from_pretrained(sent_model)
+
+text = "I love you"
+
+text = preprocess(text)
+encoded_input = tokenizer(text, return_tensors='pt')
+output = model(**encoded_input)
+scores = output[0][0].detach().numpy()
+scores = softmax(scores)
+ranking = np.argsort(scores)
+ranking = ranking[::-1]
+
+print(scores)
+
+
 config = default_ppo_config()
 config.model = fine_tuned_model
 config.tokenizer = fine_tuned_tokenizer
 config.train.seq_length = 16
 
-
-question = input('question: ')
-pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
-result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
-re.sub(r' +', ' ', result)
-re.sub(r'\s{2,}', '\n', result)
-
-print(f'\n{result}\n')
-
 question = input('question: ')
 
-classification_model_dir = "cardiffnlp/twitter-roberta-base-sentiment-latest"
-classification_model = AutoModelForSequenceClassification.from_pretrained(classification_model_dir)
-classification_tokenizer = AutoTokenizer.from_pretrained(classification_model_dir)
-classify = pipeline(task="sequence-classification", model=classification_model, tokenizer=classification_tokenizer)
+while True:
+    pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
+    result = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
+    re.sub(r' +', ' ', result)
+    re.sub(r'\s{2,}', '\n', result)
+    print(f'\n{result}\n')
 
+    question = input('question: ')
 
-reward = gpt2_for_reward(question)
+    reward = sentiment_task(question)['score']
 
-trainer = trlx.train(config=config, samples=[question], rewards=[reward])
-trainer.save_pretrained('../models/rlhf')
+    trainer = trlx.train(config=config, samples=[question], rewards=[reward])
+    trainer.save_pretrained('../models/rlhf')
