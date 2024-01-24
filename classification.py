@@ -22,7 +22,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 
 output_dir = "./results"
-model_dir = "../model/classification"
+model_dir = "../models/classification"
 
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 

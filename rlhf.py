@@ -49,6 +49,11 @@ re.sub(r'\s{2,}', '\n', result)
 print(f'\n{result}\n')
 
 question = input('question: ')
+classification_model = AutoModelForSequenceClassification.from_pretrained("../models/classification")
+classification_tokenizer = AutoTokenizer.from_pretrained("../models/classification")
+classify = pipeline(task="sequence-classification", model=classification_model, tokenizer=classification_tokenizer)
+
+
 reward = gpt2_for_reward(question)
 
 trainer = trlx.train(config=config, samples=[question], rewards=[reward])
