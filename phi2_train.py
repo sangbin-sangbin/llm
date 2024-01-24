@@ -184,10 +184,6 @@ tokenizer.padding_side = "right"
 peft_config = LoraConfig(
     r=32,
     lora_alpha=16,
-    target_modules=[
-    'Wqkv',
-    'out_proj'
-    ],
     bias="none",
     lora_dropout=0.05, # Conventional
     task_type="CAUSAL_LM",
