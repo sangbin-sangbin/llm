@@ -39,7 +39,6 @@ fine_tuned_model = fine_tuned_model.merge_and_unload()
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(new_model, trust_remote_code=True)
 
-
 rlhf_dir = '../models/rlhf'
 fine_tuned_model.save_pretrained(rlhf_dir)
 fine_tuned_tokenizer.save_pretrained(rlhf_dir)
@@ -65,15 +64,16 @@ def preprocess(text):
         t = 'http' if t.startswith('http') else t
         new_text.append(t)
     return " ".join(new_text)
+
 sent_model = f"cardiffnlp/twitter-roberta-base-sentiment-latest"
 sent_tokenizer = AutoTokenizer.from_pretrained(sent_model)
 sent_config = AutoConfig.from_pretrained(sent_model)
 sent_model = AutoModelForSequenceClassification.from_pretrained(sent_model)
 
 ppo_config = default_ppo_config()
-ppo_config.model = rlhf_model
-ppo_config.tokenizer = rlhf_tokenizer
-ppo_config.train.seq_length = 16
+ppo_config.model.model_path = rlhf_dir
+ppo_config.tokenizer.tokenizer_path = rlhf_dir
+ppo_config.train.seq_length = 2048
 
 question = input('question: ')
 
