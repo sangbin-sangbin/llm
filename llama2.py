@@ -14,7 +14,7 @@ import time
 
 model_name = "../models/llama-2-7b-chat-hf"
 
-new_model = "../models/new-llama2-model"
+new_model = '../models/new-llama2-model-llama-aug'
 
 device_map = {"": 0}
 
