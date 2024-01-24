@@ -28,9 +28,7 @@ device_map = {"": 0}
 # Reload model in FP16 and merge it with LoRA weights
 base_model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    low_cpu_mem_usage=True,
     return_dict=True,
-    torch_dtype=torch.float16,
     device_map=device_map,
 )
 
@@ -49,10 +47,9 @@ del fine_tuned_tokenizer
 
 rlhf_model = AutoModelForCausalLM.from_pretrained(
     rlhf_dir,
-    low_cpu_mem_usage=True,
     return_dict=True,
-    torch_dtype=torch.float16,
     device_map=device_map,
+    attn_implementation="eager",
 )
 rlhf_tokenizer = AutoTokenizer.from_pretrained(rlhf_dir, trust_remote_code=True)
 rlhf_pipe = pipeline(task="text-generation", model=rlhf_model, tokenizer=rlhf_tokenizer, max_length=1024)
@@ -95,7 +92,7 @@ while True:
     output = sent_model(**encoded_input)
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
-    reward = scores[2] - scores[0]
+    reward = scores[2] - scores[0] + (scores[1] * 0.1)
 
     trainer = trlx.train(config=ppo_config, samples=[prev_question], rewards=[reward])
     trainer.save_pretrained(rlhf_dir)
