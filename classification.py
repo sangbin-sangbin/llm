@@ -58,4 +58,5 @@ trainer = Trainer(
 
 trainer.train()
 
-trainer.save_pretrained(model_dir)
+trainer.save_model(model_dir)
+tokenizer.save_pretrained(model_dir)
