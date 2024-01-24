@@ -44,6 +44,10 @@ rlhf_dir = '../models/rlhf'
 fine_tuned_model.save_pretrained(rlhf_dir)
 fine_tuned_tokenizer.save_pretrained(rlhf_dir)
 
+del base_model
+del fine_tuned_model
+del fine_tuned_tokenizer
+
 rlhf_model = AutoModelForCausalLM.from_pretrained(
     rlhf_dir,
     low_cpu_mem_usage=True,
@@ -77,10 +81,10 @@ scores = softmax(scores)
 print(scores)
 
 
-config = default_ppo_config()
-config.model = fine_tuned_model
-config.tokenizer = fine_tuned_tokenizer
-config.train.seq_length = 16
+ppo_config = default_ppo_config()
+ppo_config.model = rlhf_model
+ppo_config.tokenizer = rlhf_tokenizer
+ppo_config.train.seq_length = 16
 
 question = input('question: ')
 
