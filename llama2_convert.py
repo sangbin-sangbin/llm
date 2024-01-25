@@ -4,13 +4,11 @@ import openvino as ov
 from pathlib import Path
 import torch
 
-
-new_full_model = '../models/llama-2-7b-chat-hf'
-#new_full_model = '../models/new-llama2-full-model'
+#new_full_model = 'NousResearch/Llama-2-7b-chat-hf'
+#new_full_model = '../models/llama-2-7b-chat-hf'
+new_full_model = '../models/new-llama2-full-model'
 
 vino_dir = '../models/llama2_vino'
-
-device_map = {"": 0}
 
 ov_model = OVModelForCausalLM.from_pretrained(
     new_full_model, export=True, compile=False
