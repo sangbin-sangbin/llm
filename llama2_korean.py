@@ -29,4 +29,6 @@ def ask(x, context='', is_input_full=False):
     )
     print(ans[0]['generated_text'])
 
-ask("딥러닝이 뭐야?")
+while True:
+    q = input("질문: ")
+    ask(q)
