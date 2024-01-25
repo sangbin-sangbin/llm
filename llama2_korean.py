@@ -29,7 +29,7 @@ pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
 while True:
     question = input('question: ')
-    result = pipe(f"# {question}\n### Assistant: 1)")[0]['generated_text']
+    result = pipe(f"[INST] {question} [/INST]")[0]['generated_text']
     result = re.sub(r' +', ' ', result)
     result = re.sub(r'\s{2,}', '\n', result)
     print()
