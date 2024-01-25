@@ -24,8 +24,12 @@ ov_model = OVModelForCausalLM.from_pretrained(
 
 test_strings = [
     "Which Remote Services can I use for my vehicle in conjunction with the My BMW App?",
-    "Who are you?"
+    "Who are you?",
+    "hello, nice to meet you.",
+    "How can I buy BMW?",
+    "How much is tesla model Y?"
 ]
+total_time = 0
 for test_string in test_strings:
     input_tokens = tokenizer(f"<s>[INST] {test_string} [/INST] ", return_tensors="pt", add_special_tokens=False)
     start = time.time()
@@ -33,6 +37,9 @@ for test_string in test_strings:
     end = time.time()
     print(tokenizer.batch_decode(result, skip_special_tokens=True)[0])
     print("elapsed time:", end - start)
+    total_time += end - start
+    
+print("total elapsed time:", total_time)
 
 while True:
     question = input("question: ")
