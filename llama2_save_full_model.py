@@ -8,11 +8,9 @@ from peft import PeftModel
 
 model_name = "../models/llama-2-7b-chat-hf"
 
-new_model = "../models/new-llama2-model"
+new_model = "../models/new-llama2-model-llama-aug"
 
 new_full_model = "../models/new-llama2-full-model"
-
-vino_dir = Path('../models/llama2_vino')
 
 device_map = {"": 0}
 
