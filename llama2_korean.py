@@ -23,7 +23,9 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map=device_map,
 )
 
-pipe = pipeline("text-generation", model=model)
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
 while True:
     question = input('question: ')
