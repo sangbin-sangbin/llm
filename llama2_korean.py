@@ -11,7 +11,19 @@ import json
 import re
 import time
 
-pipe = pipeline("text-generation", model="KRAFTON/KORani-v3-13B")
+
+model_name = "KRAFTON/KORani-v3-13B" #"beomi/llama-2-ko-7b"
+device_map = {"": 0}
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    low_cpu_mem_usage=True,
+    return_dict=True,
+    torch_dtype=torch.float16,
+    device_map=device_map,
+)
+
+pipe = pipeline("text-generation", model=model)
 
 while True:
     question = input('question: ')
