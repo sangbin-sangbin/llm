@@ -12,7 +12,7 @@ import re
 import time
 
 
-model_name = "kfkas/Llama-2-ko-7b-Chat"#"beomi/llama-2-ko-7b"
+model_name = "beomi/llama-2-ko-7b"
 device_map = {"": 0}
 
 model = AutoModelForCausalLM.from_pretrained(
