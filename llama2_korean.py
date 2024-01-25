@@ -12,7 +12,7 @@ import re
 import time
 
 
-model_name = "KRAFTON/KORani-v3-13B" #"beomi/llama-2-ko-7b"
+model_name = "beomi/llama-2-ko-7b"#"KRAFTON/KORani-v3-13B"
 device_map = {"": 0}
 
 model = AutoModelForCausalLM.from_pretrained(
