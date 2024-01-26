@@ -13,6 +13,9 @@ device = "CPU"
 ov_config = {"PERFORMANCE_HINT": "LATENCY", "NUM_STREAMS": "1", "CACHE_DIR": ""}
 
 tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.padding_side = "right"
 
 ov_model = OVModelForCausalLM.from_pretrained(
     model_dir,
