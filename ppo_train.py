@@ -1,7 +1,7 @@
 from datasets import load_dataset
 import torch
 from transformers import AutoTokenizer
-from trl import AutoModelForCausalLMWithValueHead, PPOConfig, PPOTrainer
+from trl import AutoModelForSequenceClassification, AutoModelForCausalLMWithValueHead, PPOConfig, PPOTrainer
 import torch
 from tqdm import tqdm
 from transformers import pipeline
