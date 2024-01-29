@@ -6,6 +6,7 @@ import torch
 from tqdm import tqdm
 from transformers import pipeline
 from peft import PeftModel
+import json
 
 
 batch_size = 4
