@@ -5,6 +5,8 @@ from trl import AutoModelForCausalLMWithValueHead, PPOConfig, PPOTrainer
 import torch
 from tqdm import tqdm
 from transformers import pipeline
+from peft import PeftModel
+
 
 batch_size = 4
 
