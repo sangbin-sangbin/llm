@@ -32,7 +32,7 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 config = PPOConfig(
-    #model_name="gpt2",
+    model_name="gpt2",
     learning_rate=1.41e-5,
     batch_size=batch_size
 )
