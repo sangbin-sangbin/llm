@@ -11,20 +11,17 @@ from peft import PeftModel
 batch_size = 4
 
 model_name = "../models/llama-2-7b-chat-hf"
-new_model = '../models/new-llama2-model-llama-aug'
+model_dir = '../models/new-llama2-full-model'
 device_map = {"": 0}
 
 # Reload model in FP16 and merge it with LoRA weights
-base_model = AutoModelForCausalLMWithValueHead.from_pretrained(
-    model_name,
+model = AutoModelForCausalLMWithValueHead.from_pretrained(
+    model_dir,
     low_cpu_mem_usage=True,
     return_dict=True,
     torch_dtype=torch.float16,
     device_map='cuda',
 )
-
-model = PeftModel.from_pretrained(base_model, new_model)
-model = model.merge_and_unload()
 
 # Reload tokenizer to save it
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
