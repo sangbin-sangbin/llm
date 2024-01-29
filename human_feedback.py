@@ -48,6 +48,7 @@ for data in dataset:
     result2 = pipe(f"<s>[INST] hello, {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] hello, {question} [/INST]", '').replace('</s>', '')
     result2 = re.sub(r' +', ' ', result2)
     result2 = re.sub(r'\s{2,}', '\n', result2)
+    print(f'question: {question}')
     print(f'result1\n>>> {result1}')
     print(f'result2\n>>> {result2}')
 
