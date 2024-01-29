@@ -17,7 +17,7 @@ driver.implicitly_wait(10)
 time.sleep(2)
 
 data = []
-while True:
+for _ in range(10): #while True:
     try:
         learn_more_button = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div/div[4]/div/div/c-scp-generic-article-list/div/div/div/button')
         learn_more_button.click()

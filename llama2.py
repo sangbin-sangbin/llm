@@ -36,7 +36,7 @@ fine_tuned_tokenizer.padding_side = "right"
 
 logging.set_verbosity(logging.CRITICAL)
 
-pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
+pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024, temperature=0.1)
 
 while True:
     question = input('question: ')

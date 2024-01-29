@@ -146,6 +146,18 @@ seen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in seen_da
 unseen_test_data_list = json.load(open('../data/unseen_test_data.json'))
 unseen_test_dataset = Dataset.from_dict({"text": [item["text"] for item in unseen_test_data_list]})
 
+print()
+print()
+print()
+print(len(train_data_list))
+print(len(val_data_list))
+print(len(seen_data_list))
+print(len(unseen_test_data_list))
+print()
+print()
+print()
+
+
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
 
