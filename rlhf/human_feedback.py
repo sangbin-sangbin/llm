@@ -12,8 +12,8 @@ import re
 import time
 
 
-model_name = "../models/llama-2-7b-chat-hf"
-new_model = '../models/new-llama2-model-llama-aug'
+model_name = "../../models/llama-2-7b-chat-hf"
+new_model = '../../models/new-llama2-model-llama-aug'
 device_map = {"": 0}
 
 # Reload model in FP16 and merge it with LoRA weights
@@ -39,7 +39,7 @@ logging.set_verbosity(logging.CRITICAL)
 pipe = pipeline(task="text-generation", model=fine_tuned_model, tokenizer=fine_tuned_tokenizer, max_length=1024)
 
 res = {'instruction':[], 'chosen_response':[], 'rejected_response':[]}
-dataset = json.load(open('../data/data.json'))
+dataset = json.load(open('../../data/data.json'))
 for data in dataset:
     question = data[0]
     result1 = pipe(f"<s>[INST] {question} [/INST]")[0]['generated_text'].replace(f"<s>[INST] {question} [/INST]", '').replace('</s>', '')
