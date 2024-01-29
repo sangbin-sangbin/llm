@@ -9,7 +9,7 @@ from peft import PeftModel
 import json
 
 
-batch_size = 4
+batch_size = 2
 
 
 model_name = 'gpt2'#"../models/llama-2-7b-chat-hf"
