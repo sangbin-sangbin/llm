@@ -2,6 +2,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, Trai
 from trl import RewardTrainer
 from datasets import Dataset
 import json
+from peft import PeftModel
 
 
 model_name = "distilroberta-base"
