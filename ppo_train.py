@@ -10,8 +10,9 @@ from peft import PeftModel
 
 batch_size = 4
 
-model_name = "../models/llama-2-7b-chat-hf"
-model_dir = '../models/new-llama2-full-model'
+
+model_name = 'gpt2'#"../models/llama-2-7b-chat-hf"
+model_dir = 'gpt2'#'../models/new-llama2-full-model'
 device_map = {"": 0}
 
 # Reload model in FP16 and merge it with LoRA weights
