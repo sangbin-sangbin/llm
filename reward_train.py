@@ -29,7 +29,7 @@ formatted_dataset = prepared_dataset.map(formatting_func)
 formatted_dataset = formatted_dataset.train_test_split()
 # Configuring the training arguments
 training_args = TrainingArguments(
-    output_dir="../../models/reward_model",
+    output_dir="../models/reward_model",
     per_device_train_batch_size=16,
     evaluation_strategy="steps",
     logging_steps=1,
@@ -47,7 +47,7 @@ trainer = RewardTrainer(
 trainer.train()
 trainer.save_model()
 
-model = AutoModelForSequenceClassification.from_pretrained("../../models/reward_model", num_labels=1)
+model = AutoModelForSequenceClassification.from_pretrained("../models/reward_model", num_labels=1)
 
 pt = tokenizer(
     "hello\nhi",

@@ -33,7 +33,7 @@ generation_kwargs = {
 }
 
 
-reward_model = AutoModelForSequenceClassification.from_pretrained("../../models/reward_model", num_labels=1).to('cuda')
+reward_model = AutoModelForSequenceClassification.from_pretrained("../models/reward_model", num_labels=1).to('cuda')
 
 def tokenize(data):
     tmp = tokenizer(
@@ -71,4 +71,4 @@ for epoch in tqdm(range(ppo_trainer.config.ppo_epochs), "epoch: "):
         stats = ppo_trainer.step(batch, response_tensors, rewards)
         
 #### Save model
-ppo_trainer.save_pretrained("../../models/my_ppo_model")
+ppo_trainer.save_pretrained("../models/my_ppo_model")
