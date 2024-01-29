@@ -66,3 +66,5 @@ for data in dataset:
     elif feedback == '0':
         break
 
+with open('../data/human_feedback_data.json', 'w') as f : 
+    json.dump(res, f, indent=4)

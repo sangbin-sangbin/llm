@@ -8,15 +8,33 @@ from transformers import pipeline
 
 batch_size = 4
 
+model_name = "../models/llama-2-7b-chat-hf"
+new_model = '../models/new-llama2-model-llama-aug'
+device_map = {"": 0}
+
+# Reload model in FP16 and merge it with LoRA weights
+base_model = AutoModelForCausalLMWithValueHead.from_pretrained(
+    model_name,
+    low_cpu_mem_usage=True,
+    return_dict=True,
+    torch_dtype=torch.float16,
+    device_map='cuda',
+)
+
+model = PeftModel.from_pretrained(base_model, new_model)
+model = model.merge_and_unload()
+
+# Reload tokenizer to save it
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.padding_side = "right"
+
 config = PPOConfig(
-    model_name="gpt2",
+    #model_name="gpt2",
     learning_rate=1.41e-5,
     batch_size=batch_size
 )
-
-model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_name)
-tokenizer = AutoTokenizer.from_pretrained(config.model_name)
-tokenizer.pad_token = tokenizer.eos_token
 
 ppo_trainer = PPOTrainer(
     model=model,
@@ -32,7 +50,6 @@ generation_kwargs = {
     "pad_token_id": tokenizer.eos_token_id,
 }
 
-
 reward_model = AutoModelForSequenceClassification.from_pretrained("../models/reward_model", num_labels=1).to('cuda')
 
 def tokenize(data):
@@ -44,9 +61,9 @@ def tokenize(data):
     )['input_ids']
     return list(map(lambda x : torch.tensor(x).to('cuda'), tmp))
 
-datalist = ['hello my name is sangbin', 'what is your name?', 'hello my name is sangbin', 'what is your name?', 'hello my name is sangbin', 'what is your name?', 'hello my name is sangbin', 'what is your name?']
+datalist = json.load(open('../data/data.json'))
 
-dataset = [datalist[i:i+batch_size] for i in range(0, len(datalist), batch_size)]
+dataset = [datalist[i:i+batch_size][0] for i in range(0, len(datalist), batch_size)]
 dataset = list(map(tokenize, dataset))
 
 enter = torch.tensor(tokenizer('\n')['input_ids']).to('cuda')

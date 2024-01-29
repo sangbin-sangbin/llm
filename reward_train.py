@@ -22,7 +22,7 @@ def formatting_func(examples):
         "input_ids_rejected": tokens_rejected["input_ids"][0], "attention_mask_rejected": tokens_rejected["attention_mask"][0]
     }
 
-prepared_dataset = {'instruction':['hello', 'hello', 'hello'], 'chosen_response':['hi', 'hi', 'hi'], 'rejected_response':['I hate you', 'I hate you', 'I hate you']}
+prepared_dataset = json.load(open('../data/human_feedback_data.json'))
 prepared_dataset = Dataset.from_dict(prepared_dataset)
 
 formatted_dataset = prepared_dataset.map(formatting_func)
